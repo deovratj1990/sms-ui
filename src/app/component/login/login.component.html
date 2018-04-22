@@ -1,0 +1,47 @@
+<form #formLogin="ngForm" (ngSubmit)="login(formLogin)">
+
+  <div class="card col-sm-8 col-md-6 col-lg-4 p-0">
+    <h5 class="card-header">Login</h5>
+    <div class="card-body">
+
+      <div class="form-group text-left">
+        <label for="mobile" class="col-form-label">Mobile</label>
+        <input type="number" id="mobile" ngModel #mobile="ngModel" name="mobile"
+          class="form-control" placeholder="Mobile" required (keyup)="validateMobile($event)">
+        <div class="alert alert-danger" *ngIf="mobile.touched && (!mobile.valid || !loginValidation.mobile)">
+          <div *ngIf="!mobile.valid">Mobile is required.</div>
+          <div *ngIf="mobile.valid && !loginValidation.mobile">Mobile must be valid.</div>
+        </div>
+      </div>
+
+      <div class="form-group text-left">
+        <label for="password">Password</label>
+        <input type="password" id="password" ngModel #password="ngModel" name="password"
+          class="form-control" placeholder="Password" required>
+        <div class="alert alert-danger" *ngIf="password.touched && !password.valid">
+          Password is required.
+        </div>
+      </div>
+
+      <div class="form-group text-left" *ngIf="requireOtp">
+        <label for="otp">OTP</label>
+        <input type="number" id="otp" ngModel #otp="ngModel" name="otp"
+          class="form-control" placeholder="OTP" required>
+        <div class="alert alert-danger" *ngIf="otp.touched && !otp.valid">
+          OTP is required.     
+        </div>
+      </div>
+
+      <div class="form-group text-right">
+        <button class="btn btn-primary" type="submit" [disabled]="!formLogin.valid || !loginValidation.mobile">Login</button>
+      </div>
+
+      <div class="form-group text-right">
+        <label for="loginSubmit" class="col-form-label">Haven't Registered with SMS</label>
+        <button class="btn btn-primary btn-sm" routerLink="/registration" >Register</button>
+      </div>
+
+    </div>
+  </div>
+
+</form>

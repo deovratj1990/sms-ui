@@ -1,0 +1,81 @@
+<form #formRegistration="ngForm" (ngSubmit)="register(formRegistration)">
+
+    <div class="card col-sm-8 col-md-6 col-lg-4 p-0">
+      <h5 class="card-header">Registration</h5>
+      <div class="card-body">
+
+        <div class="form-group text-center" *ngIf="(formRegistrationMsg != '')">
+          <div [ngClass]="(formRegistrationSuccess) ? 'alert alert-success' : 'alert alert-danger'">
+            {{ formRegistrationMsg }}
+          </div>
+        </div>
+
+        <div class="form-group text-left">
+          <label for="societyId" class="col-form-label">Society</label>
+          <select class="form-control" id="societyId" name="societyId" 
+          [(ngModel)] = "registration.societyId" #societyId="ngModel" required (change)="getRooms($event)">
+            <option value="">-Select-</option>
+            <option *ngFor="let soc of societies" [value]="soc.id"> {{ soc.name }} </option>
+          </select>
+          <div class="alert alert-danger" *ngIf="societyId.touched && !societyId.valid">
+            Select Atleast 1 Society.
+          </div>
+        </div>
+  
+        <div class="form-group text-left">
+          <label for="roomId" class="col-form-label">Room</label>
+          <select class="form-control" id="roomId" [(ngModel)] = "registration.roomId" #roomId="ngModel" name="roomId" required>
+            <option value="">-Select-</option>
+            <option *ngFor="let room of rooms" [value]="room.id"> {{ room.number }} </option>
+          </select>
+          <div class="alert alert-danger" *ngIf="roomId.touched && !roomId.valid">
+            Select Atleast 1 Room.
+          </div>
+        </div>
+  
+        <div class="form-group text-left">
+          <label for="name" class="col-form-label">Name</label>
+          <input type="text" id="name" [(ngModel)] = "registration.name" #name="ngModel" name="name"
+            class="form-control" placeholder="Name" required>
+          <div class="alert alert-danger" *ngIf="name.touched && !name.valid">
+            Name is required.
+          </div>
+        </div>
+  
+        <div class="form-group text-left">
+          <label for="mobile" class="col-form-label">Mobile</label>
+          <input type="number" id="mobile" [(ngModel)] = "registration.mobile" #mobile="ngModel" name="mobile"
+            class="form-control" placeholder="Mobile" required (keyup)="validateMobile($event)">
+          <div class="alert alert-danger" *ngIf="mobile.touched && (!mobile.valid || !validation.mobile)">
+            <div *ngIf="!mobile.valid">Mobile is required.</div>
+            <div *ngIf="mobile.valid && !validation.mobile">Mobile must be valid.</div>
+          </div>
+        </div>
+  
+        <div class="form-group text-left">
+          <label for="password">Password</label>
+          <input type="password" id="password" [(ngModel)] = "registration.password" #password="ngModel" name="password"
+            class="form-control" placeholder="Password" required (keyup)="validatePassword(confirmPassword, $event)">
+          <div class="alert alert-danger" *ngIf="password.touched && !password.valid">
+            Password is required.
+          </div>
+        </div>
+  
+        <div class="form-group text-left">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" [(ngModel)] = "registration.confirmPassword" #confirmPassword="ngModel" name="confirmPassword"
+            class="form-control" placeholder="Confirm Password" required (keyup)="validatePassword(password, $event)" >
+          <div class="alert alert-danger" *ngIf="confirmPassword.touched && (!confirmPassword.valid || !validation.confirmPassword)">
+              <div *ngIf="!confirmPassword.valid">Confirm Password is required.</div>
+              <div *ngIf="confirmPassword.valid && !validation.confirmPassword">Password and Confirm Password should match.</div>              
+          </div>
+        </div>
+
+        <div class="form-group text-right">
+          <button class="btn btn-primary" type="submit" [disabled]="!formRegistration.valid || !validation.mobile || !validation.confirmPassword">Register</button>
+        </div>
+
+      </div>
+    </div>
+  
+  </form>
