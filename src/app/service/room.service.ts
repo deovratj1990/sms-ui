@@ -14,7 +14,7 @@ import { Room } from '../classes/render/Room';
 @Injectable()
 export class RoomService {
 
-  private url: string = 'http://localhost/sms-service/room.php?action=';
+  private url: string = 'http://localhost/sms-proxy/room.php?action=';
 
   constructor(private http: Http) { }
 

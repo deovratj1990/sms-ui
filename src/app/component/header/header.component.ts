@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from '../../service/login.service';
 
+import * as $ from 'jquery';
+
 @Component({
   selector: 'header',
   templateUrl: './header.component.html',
@@ -17,5 +19,4 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.loginService.logout();
   }
-
 }

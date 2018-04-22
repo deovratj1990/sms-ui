@@ -16,7 +16,7 @@ import { TransactionType } from '../classes/render/TransactionType';
 @Injectable()
 export class TransactionDefinitionService {
 
-    private url = 'http://localhost/sms-service/transactionDefinition.php?action=';
+    private url = 'http://localhost/sms-proxy/transactionDefinition.php?action=';
 
     constructor(private http: Http) { }
     

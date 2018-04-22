@@ -15,7 +15,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class SocietyService {
 
-  private url: string = 'http://localhost/sms-service/society.php?action=';
+  private url: string = 'http://localhost/sms-proxy/society.php?action=';
 
   constructor(private http: Http) { }
 

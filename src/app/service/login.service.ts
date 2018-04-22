@@ -16,7 +16,7 @@ import 'rxjs/add/observable/throw';
 export class LoginService {
 
   //private url: string = 'http://192.168.0.3/';
-  private url: string = 'http://localhost/sms-service/login.php?action=';
+  private url: string = 'http://localhost/sms-proxy/login.php?action=';
 
   constructor(
     private http: Http,

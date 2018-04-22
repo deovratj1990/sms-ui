@@ -17,7 +17,7 @@ export class CostHeaderService {
 
     private apiResponse: ApiResponse = new ApiResponse();
 
-    private url = 'http://localhost/sms-service/costHeader.php?action=';
+    private url = 'http://localhost/sms-proxy/costHeader.php?action=';
 
     constructor(private http: Http) { }
 

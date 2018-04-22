@@ -17,7 +17,7 @@ export class AccountsService {
 
     private apiResponse: ApiResponse = new ApiResponse();
 
-    private url = 'http://localhost/sms-service/accounts.php?action=';
+    private url = 'http://localhost/sms-proxy/accounts.php?action=';
 
     constructor(private http: Http) { }
 

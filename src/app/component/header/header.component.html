@@ -18,16 +18,16 @@
             <span class="glyphicon glyphicon-chevron-down pl-2"></span>
           </a>
           <div id="account-manage-div" class="collapse pl-2 menu-level-3">
-            <a class="nav-link p-2" routerLink="/manage-account" routerLinkActive="active">
+            <a class="nav-link nav-link-routing p-2" routerLink="/manage-account" routerLinkActive="active">
               Manage Account's
             </a>
-            <a class="nav-link p-2" routerLink="/manage-cost-header" routerLinkActive="active">
+            <a class="nav-link nav-link-routing p-2" routerLink="/manage-cost-header" routerLinkActive="active">
               Manage Cost Header's
             </a>
-            <a class="nav-link p-2" routerLink="/manage-transaction-definition" routerLinkActive="active">
+            <a class="nav-link nav-link-routing p-2" routerLink="/manage-transaction-definition" routerLinkActive="active">
               Manage Transaction Definition
             </a>
-            <a class="nav-link p-2" routerLink="/manage-voucher" routerLinkActive="active">
+            <a class="nav-link nav-link-routing p-2" routerLink="/manage-voucher" routerLinkActive="active">
               Manage Vouchers
             </a>
           </div>
@@ -37,7 +37,7 @@
             <span class="glyphicon glyphicon-chevron-down pl-2"></span>
           </a>
           <div id="account-pay-div" class="collapse pl-2 menu-level-3">
-            <a class="nav-link p-2">
+            <a class="nav-link nav-link-routing p-2">
               BMC
             </a>
           </div>
@@ -47,7 +47,7 @@
             <span class="glyphicon glyphicon-chevron-down pl-2"></span>
           </a>
           <div id="account-collect-div" class="collapse pl-2 menu-level-3">
-            <a class="nav-link p-2">
+            <a class="nav-link nav-link-routing p-2">
               Maintenance
             </a>
           </div>
@@ -55,13 +55,13 @@
         </div>
       </li>
       <li class="nav-item" *ngIf="!loginService.isLoggedIn()">
-        <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+        <a class="nav-link nav-link-routing" routerLink="/login" routerLinkActive="active">Login</a>
       </li>
       <li class="nav-item" *ngIf="loginService.isLoggedIn()">
-        <a class="nav-link" (click)="logout()" style="cursor: pointer;">Logout</a>
+        <a class="nav-link nav-link-routing" (click)="logout()">Logout</a>
       </li>
-      <li class="nav-item" *ngIf="loginService.isLoggedIn()">
-        <a class="nav-link" (click)="logout()" style="cursor: pointer;">{{ loginService.currentUser.name }}</a>
+      <li class="nav-item float-right" *ngIf="loginService.isLoggedIn()">
+        <a class="nav-link nav-link-routing" routerLink="/dashboard" routerLinkActive="active">{{ 'Welcome ' + loginService.currentUser.name }}</a>
       </li>
     </ul>
   </div>
