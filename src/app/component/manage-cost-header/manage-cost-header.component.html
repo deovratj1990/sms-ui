@@ -1,51 +1,44 @@
-<div class="card col-sm-8 col-md-8 col-lg-6 p-0 mt-3">
-
-  <form #formCostHeader="ngForm" (ngSubmit)="save(formCostHeader)">
-
-    <h5 class="card-header">Manage Cost Header</h5>
-    <div class="card-body">
-
-        <div class="form-group text-center alert " [ngClass]="{
-          'alert-info': formSuccess?.flag == SuccessFlag.PENDING,
-          'alert-success': formSuccess?.flag == SuccessFlag.SUCCESS,
-          'alert-danger': formSuccess?.flag == SuccessFlag.FAILURE
-        }" *ngIf="formSuccess.message != ''">
-          {{ formSuccess.message }}
+<form #formCostHeader="ngForm" (ngSubmit)="save(formCostHeader)">
+  <!-- Modal -->
+  <div class="modal fade" id="costHeaderModalForm" tabindex="-1" role="dialog" aria-labelledby="costHeaderModalForm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-light">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Cost Header Form</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-  
-        <div class="form-group row text-left">
-        <label for="name" class="col-form-label col-md-2 col-lg-2">Name</label>
-        <div class=" col-md-10 col-lg-10">
-          <input type="text" id="name" [(ngModel)]="costHeaderForm.name" #name="ngModel" name="name" class="form-control" placeholder="Name"
-            required>
-          <div class="alert alert-danger" *ngIf="name.touched && !name.valid">
-            Name is required.
+        <div class="modal-body">
+
+          <div class="form-group row text-left">
+            <label for="name" class="col-form-label col-md-2 col-lg-2">Name</label>
+            <div class=" col-md-10 col-lg-10">
+              <input type="text" id="name" [(ngModel)]="costHeaderForm.name" #name="ngModel" name="name" class="form-control" placeholder="Name"
+                required pattern="[A-za-z]+">
+            </div>
           </div>
+
+        </div>
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-outline-primary" type="submit" [disabled]="!formCostHeader.valid">Save</button>
         </div>
       </div>
-
-      <div class="form-group text-right">
-        <button class="btn btn-primary" type="submit" [disabled]="!formCostHeader.valid">Save</button>
-      </div>
-
     </div>
+  </div>
 
-  </form>
+</form>
 
+<div class="p-0 mt-3">
 </div>
 
 <div class="card p-0 mt-3">
 
-  <div class="form-group text-center alert " [ngClass]="{
-      'alert-info': listSuccess?.flag == SuccessFlag.PENDING,
-      'alert-success': listSuccess?.flag == SuccessFlag.SUCCESS,
-      'alert-danger': listSuccess?.flag == SuccessFlag.FAILURE
-    }" *ngIf="listSuccess.message != ''">
-    {{ listSuccess.message }}
-  </div>
-
   <div class="card-header text-left">
     <h5>Cost Headers</h5>
+    <button class="btn btn-outline-primary" style="position: absolute; right: 10px; top: 10px;" (click)="resetForm(formCostHeader)"
+      data-toggle="modal" data-target="#costHeaderModalForm">Add Cost Header</button>
   </div>
   <div class="card-body p-0">
 
@@ -54,18 +47,16 @@
         <tr>
           <th width="5%">#</th>
           <th>Name</th>
-          <th align="center" width="5%">Edit</th>
-          <th align="center" width="5%">Delete</th>
+          <th class="text-right" width="20%">Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let ch of costHeaders; index as i;">
           <th scope="row">{{ i+1 }}</th>
           <td>{{ ch.name }}</td>
-          <td align="center">
-            <span class="glyphicon glyphicon-pencil text-primary" style="cursor: pointer;" (click)="edit(ch.id)"></span>
-          </td>
-          <td align="center">
+          <td align="right">
+            <span class="glyphicon glyphicon-pencil text-primary mr-2" style="cursor: pointer;" (click)="edit(ch.id)" data-toggle="modal"
+              data-target="#costHeaderModalForm"></span>
             <span class="glyphicon glyphicon-remove text-danger" style="cursor: pointer;" (click)="delete(ch.id)"></span>
           </td>
         </tr>

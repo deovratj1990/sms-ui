@@ -1,0 +1,8 @@
+<small class="d-block" [ngClass]="{
+          'text-info': element.flag === AlertType.INFO,
+          'text-success': element.flag === AlertType.SUCCESS,
+          'text-danger': element.flag === AlertType.DANGER,
+          'text-warning': element.flag === AlertType.WARNING
+        }">
+    {{ element.message }}
+</small>

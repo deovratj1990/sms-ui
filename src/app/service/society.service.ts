@@ -3,42 +3,35 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 import { AppError } from '../classes/error/app-error';
-import { NotFoundError } from '../classes/error/not-found-error';
-import { BadInputError } from '../classes/error/bad-input';
 
 import { Society } from '../classes/render/Society';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/map';
+import { ApiResponse } from '../classes/io/ApiResponse';
+import { Config } from '../classes/common/Config';
 
 @Injectable()
 export class SocietyService {
 
-  private url: string = 'http://localhost/sms-proxy/society.php?action=';
+  private reqMap: string = 'society';
+  private url: string;
 
-  constructor(private http: Http) { }
+  constructor(private http: Http) {
+    if (Config.API_TYPE == 'PHP')
+      this.url = Config.API_URL + this.reqMap + '.php?action=';
+    else
+      this.url = Config.API_URL + this.reqMap + '/';
+  }
 
-  getSocieties(): Observable<Society[]> {
-    return this.http.get(this.url + 'getSocieties')
-      .map(response => response.json().data)
+  getAllSocieties(): Observable<ApiResponse> {
+    return this.http.get(this.url + 'get')
+      .map(response => response.json())
       .catch(this.handleError);
   }
 
   private handleError(error: Response) {
-
-    if (error.status === 0 || error.status === 404) {
-      return Observable.throw(new NotFoundError(error));
-    }
-
-    if (error.status === 400) {
-      return Observable.throw(new BadInputError(error));
-    }
-
     return Observable.throw(new AppError(error));
-
   }
-
-
-
 }

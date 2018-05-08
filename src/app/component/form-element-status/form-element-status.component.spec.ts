@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ManageAccountComponent } from './manage-account.component';
+import { FormElementStatusComponent } from './form-element-status.component';
 
-describe('ManageAccountComponent', () => {
-  let component: ManageAccountComponent;
-  let fixture: ComponentFixture<ManageAccountComponent>;
+describe('FormElementStatusComponent', () => {
+  let component: FormElementStatusComponent;
+  let fixture: ComponentFixture<FormElementStatusComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ManageAccountComponent ]
+      declarations: [ FormElementStatusComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ManageAccountComponent);
+    fixture = TestBed.createComponent(FormElementStatusComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

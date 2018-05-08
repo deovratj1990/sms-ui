@@ -1,0 +1,7 @@
+<div class="form-group text-center alert " [ngClass]="{
+  'alert-info': formAlert?.type === AlertType.INFO,
+  'alert-success': formAlert?.type === AlertType.SUCCESS,
+  'alert-danger': formAlert?.type === AlertType.DANGER
+}" *ngIf="formAlert.type == AlertType.INFO || formAlert.type == AlertType.DANGER" >
+{{ formAlert.text }}
+</div>
