@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormElementStatusComponent } from './form-element-status.component';
+import { ValidationErrorComponent } from './validation-error.component';
 
-describe('FormElementStatusComponent', () => {
-  let component: FormElementStatusComponent;
-  let fixture: ComponentFixture<FormElementStatusComponent>;
+describe('ValidationErrorComponent', () => {
+  let component: ValidationErrorComponent;
+  let fixture: ComponentFixture<ValidationErrorComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FormElementStatusComponent ]
+      declarations: [ ValidationErrorComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FormElementStatusComponent);
+    fixture = TestBed.createComponent(ValidationErrorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

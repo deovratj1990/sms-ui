@@ -14,7 +14,7 @@ import { LoginComponent } from './component/login/login.component';
 import { MemberRegistrationComponent } from './component/member-registration/member-registration.component';
 import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
 import { AlertResponseComponent } from './component/alert-response/alert-response.component';
-import { FormElementStatusComponent } from './component/form-element-status/form-element-status.component';
+import { ValidationErrorComponent } from './component/validation-error/validation-error.component';
 
 import { AppErrorHandler } from './classes/error/app-error-handler';
 
@@ -43,7 +43,7 @@ import { SocietyRegistrationComponent } from './component/society-registration/s
     ManageVoucherComponent,
     PageNotFoundComponent,
     AlertResponseComponent,
-    FormElementStatusComponent,
+    ValidationErrorComponent,
   ],
   imports: [
     BrowserModule,

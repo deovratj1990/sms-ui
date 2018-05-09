@@ -4,11 +4,11 @@ import { ValidationType } from '../../classes/enum/ValidationType';
 import { Validation } from '../../classes/io/Validation';
 
 @Component({
-  selector: 'app-form-element-status',
-  templateUrl: './form-element-status.component.html',
-  styleUrls: ['./form-element-status.component.css']
+  selector: 'app-validation-error',
+  templateUrl: './validation-error.component.html',
+  styleUrls: ['./validation-error.component.css']
 })
-export class FormElementStatusComponent implements OnInit {
+export class ValidationErrorComponent implements OnInit {
 
   @Input() private element: Validation;
   private AlertType = AlertType;

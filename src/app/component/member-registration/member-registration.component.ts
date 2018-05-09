@@ -38,35 +38,37 @@ export class MemberRegistrationComponent implements OnInit {
   ngOnInit() {
     this.memberRegistrationForm = {
       societyId: {
-        validation: { flag: AlertType.DANGER, validationType: ValidationType.REQUIRED, message: 'Society is Mandatory.' },
+        activityType: {show: 1, type: AlertType.INFO, text: 'Fetching Data. Please wait.'},
+        validation: { validationType: ValidationType.REQUIRED, text: 'Society is Mandatory.' },
         data: ''
       },
       roomId: {
-        validation: { flag: AlertType.DANGER, validationType: ValidationType.REQUIRED, message: 'Room is Mandatory.'},
+        activityType: {show: 0, type: AlertType.INFO, text: 'Fetching Data. Please wait.'},
+        validation: { validationType: ValidationType.REQUIRED, text: 'Room is Mandatory.' },
         data: ''
       },
       name: {
         validation: [
-          { flag: AlertType.DANGER, validationType: ValidationType.REQUIRED, message: 'Name is Mandatory.'},
-          { flag: AlertType.DANGER, validationType: ValidationType.VALID, message: 'Name must be Valid.'}
+          { validationType: ValidationType.REQUIRED, text: 'Name is Mandatory.' },
+          { validationType: ValidationType.VALID, text: 'Name must be Valid.' }
         ],
         data: ''
       },
       mobile: {
         validation: [
-          { flag: AlertType.DANGER, validationType: ValidationType.REQUIRED, message: 'Mobile is Mandatory.'},
-          { flag: AlertType.DANGER, validationType: ValidationType.VALID, message: 'Mobile must be Valid.'}
+          { validationType: ValidationType.REQUIRED, text: 'Mobile is Mandatory.' },
+          { validationType: ValidationType.VALID, text: 'Mobile must be Valid.' }
         ],
         data: ''
       },
       password: {
-        validation: { flag: AlertType.DANGER, validationType: ValidationType.REQUIRED, message: 'Password is Mandatory.'},
+        validation: { validationType: ValidationType.REQUIRED, text: 'Password is Mandatory.' },
         data: ''
       },
       confirmPassword: {
         validation: [
-          { flag: AlertType.DANGER, validationType: ValidationType.REQUIRED, message: 'Confirm Password is Mandatory.'},
-          { flag: AlertType.DANGER, validationType: ValidationType.MATCH, message: 'Confirm Password must match Password.'}
+          { validationType: ValidationType.REQUIRED, text: 'Confirm Password is Mandatory.' },
+          { validationType: ValidationType.MATCH, text: 'Confirm Password must match Password.' }
         ],
         data: ''
       }
@@ -76,25 +78,24 @@ export class MemberRegistrationComponent implements OnInit {
   }
 
   getSociety(): void {
-    this.memberRegistrationForm.societyId.validation.flag = AlertType.INFO;
-    this.memberRegistrationForm.societyId.validation.message = 'Fetching Data. Please wait.';
 
     this.societyService.getAllSocieties()
       .subscribe(
         response => {
           if (response.code === HttpStatus.OK || response.code === HttpStatus.NO_CONTENT) {
             this.societies = response.data.societies
-            this.memberRegistrationForm.societyId.validation.flag = AlertType.DANGER;
-            this.memberRegistrationForm.societyId.validation.message = 'Society is mandatory.';
+            this.memberRegistrationForm.societyId.activityType.show = 0;
             return false;
           }
 
-          this.memberRegistrationForm.societyId.validation.flag = AlertType.DANGER;
-          this.memberRegistrationForm.societyId.validation.message = 'Something went wrong.';
+          this.memberRegistrationForm.societyId.activityType.show = 1;
+          this.memberRegistrationForm.societyId.activityType.type = AlertType.DANGER
+          this.memberRegistrationForm.societyId.activityType.text = 'Something went wrong.';
         },
         (error: AppError) => {
-          this.memberRegistrationForm.societyId.validation.flag = AlertType.DANGER;
-          this.memberRegistrationForm.societyId.validation.message = 'Something went wrong.';
+          this.memberRegistrationForm.societyId.activityType.show = 1;
+          this.memberRegistrationForm.societyId.activityType.type = AlertType.DANGER
+          this.memberRegistrationForm.societyId.activityType.text = 'Something went wrong.';
         }
       );
   }
@@ -105,25 +106,26 @@ export class MemberRegistrationComponent implements OnInit {
       return false;
     }
 
-    this.memberRegistrationForm.roomId.validation.flag = AlertType.INFO;
-    this.memberRegistrationForm.roomId.validation.message = 'Fetching Data. Please wait.';
+    this.memberRegistrationForm.roomId.activityType.show = 1;
 
     this.roomService.getRoomsBySocietyId(this.memberRegistrationForm.societyId.data)
       .subscribe(
         response => {
           if (response.code === HttpStatus.OK || response.code === HttpStatus.NO_CONTENT) {
             this.rooms = response.data.rooms;
-            this.memberRegistrationForm.roomId.validation.flag = AlertType.DANGER;
-            this.memberRegistrationForm.roomId.validation.message = 'Room is Mandatory';
+            this.memberRegistrationForm.roomId.validation.text = 'Room is Mandatory';
+            this.memberRegistrationForm.roomId.activityType.show = 0;
             return false;
           }
 
-          this.memberRegistrationForm.roomId.validation.flag = AlertType.DANGER;
-          this.memberRegistrationForm.roomId.validation.message = 'Something went wrong.';
+          this.memberRegistrationForm.roomId.activityType.show = 1;
+          this.memberRegistrationForm.roomId.activityType.type = AlertType.DANGER
+          this.memberRegistrationForm.roomId.validation.text = 'Something went wrong.';
         },
         (error: AppError) => {
-          this.memberRegistrationForm.roomId.validation.flag = AlertType.DANGER;
-          this.memberRegistrationForm.roomId.validation.message = 'Something went wrong.';
+          this.memberRegistrationForm.roomId.activityType.show = 1;
+          this.memberRegistrationForm.roomId.activityType.type = AlertType.DANGER
+          this.memberRegistrationForm.roomId.validation.text = 'Something went wrong.';
         }
       );
   }
@@ -137,26 +139,42 @@ export class MemberRegistrationComponent implements OnInit {
         response => {
           if (response.code === HttpStatus.CREATED || response.code === HttpStatus.CONFLICT) {
             this.formSuccess.type = AlertType.SUCCESS;
-            //this.formSuccess.text = response.validation.message;
+            //this.formSuccess.text = response.validation.text;
             formRegistration.reset();
             return false;
           }
 
           if (response.code === HttpStatus.BAD_REQUEST) {
-            Object.keys(response.data.validationError).forEach(element => {
-              this.memberRegistrationForm[element].validation = new Array<Validation>();
 
-              if (!response.data.validationError[element].length) {
-                this.memberRegistrationForm[element].validation = response.data.validationError[element];
-              } else {
-                response.data.validationError[element].forEach(elementArray => {
-                  this.memberRegistrationForm[element].validation.push(elementArray);
+            Object.keys(response.data.validationError).forEach(element => {
+
+              if (response.data.validationError[element].length) {
+
+                response.data.validationError[element].forEach(resElement => {
+
+                  if (this.memberRegistrationForm[element].validation.length) {
+                    let index = this.memberRegistrationForm[element].validation.findIndex(x => x.validationType == resElement.validationType);
+                    this.memberRegistrationForm[element].validation[index].text = resElement.text;
+                  } else {
+                    if (this.memberRegistrationForm[element].validation.validationType == resElement.validationType)
+                      this.memberRegistrationForm[element].validation.text = resElement.text;
+                  }
+
                 });
+
+              } else {
+
+                if (this.memberRegistrationForm[element].validation.length) {
+                  let index = this.memberRegistrationForm[element].validation.findIndex(x => x.validationType == response.data.validationError[element].validationType);
+                  this.memberRegistrationForm[element].validation[index].text = response.data.validationError[element].text;
+                } else
+                  this.memberRegistrationForm[element].validation.text = response.data.validationError[element].text;
+
               }
             });
 
             this.formSuccess.type = AlertType.DANGER;
-            //this.formSuccess.text = response.validation.message;
+            this.formSuccess.text = response.message;
             return false;
           }
 

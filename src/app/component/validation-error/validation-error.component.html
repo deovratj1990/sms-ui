@@ -1,0 +1,14 @@
+<small 
+    *ngIf="element.activityType?.show == 1"
+    class="d-block"
+    [ngClass]="{
+        'text-info': element.activityType?.type === AlertType.INFO,
+        'text-success': element.activityType?.type === AlertType.SUCCESS,
+        'text-danger': element.activityType?.type === AlertType.DANGER,
+        'text-warning': element.activityType?.type === AlertType.WARNING
+    }">
+    {{ element.activityType?.text }}
+</small>
+<small class="d-block text-danger" *ngIf="element.activityType?.show == 0">
+    {{ element.validation?.text }}
+</small>
