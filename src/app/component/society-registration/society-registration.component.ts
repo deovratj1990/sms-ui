@@ -17,6 +17,7 @@ export class SocietyRegistrationComponent implements OnInit {
 
   private societyRegistrationForm: SocietyRegistrationForm = new SocietyRegistrationForm();
   private societyRegistrationAlerts: SocietyRegistrationAlert = new SocietyRegistrationAlert();
+  private secretaryWing: Array<{id: number, name: string}> = new Array<{id: number, name: string}>()
 
   constructor() { }
 
@@ -66,6 +67,10 @@ export class SocietyRegistrationComponent implements OnInit {
     for (let i = 1; i < Number(this.societyRegistrationForm.wingCount); i++) {
       this.societyRegistrationForm.wings.push({name: '', room: ''});
     }
+  }
+
+  determineSecWing(): void {
+    console.log(this.societyRegistrationForm.wings)
   }
 
   register(formSocietyRegistration): void {

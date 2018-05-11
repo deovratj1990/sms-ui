@@ -13,7 +13,6 @@ import { Alert } from '../../classes/render/Alert';
 import { AlertType } from '../../classes/enum/AlertType';
 import { ValidationType } from '../../classes/enum/ValidationType';
 import { Validation } from '../../classes/io/Validation';
-import { ElementAlert } from '../../classes/common/memberRegistrationAlerts';
 import { MemberRegistrationAlert } from '../../classes/formAlert/MemberRegistrationAlert';
 
 @Component({
