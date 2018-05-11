@@ -1,6 +1,8 @@
+import { FormElement } from "../common/FormElement";
+
 export class LoginForm {
     mobile: string;
     password: string;
-    roomId: number;
-    otp: number;
+    roomId: string;
+    otp: string;
 }

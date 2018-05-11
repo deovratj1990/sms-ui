@@ -11,10 +11,14 @@ import { Validation } from '../../classes/io/Validation';
 export class ValidationErrorComponent implements OnInit {
 
   @Input() private element: Validation;
+  @Input() private model: any;
+  @Input() private matchField: any;
+  private matchFieldId: string = '';
   private AlertType = AlertType;
   private ValidationType = ValidationType;
 
   constructor() { }
 
   ngOnInit() { }
+
 }

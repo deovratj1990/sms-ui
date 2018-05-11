@@ -7,6 +7,8 @@ import { LoginForm } from '../../classes/io/LoginForm';
 import { HttpStatus } from '../../classes/common/HttpStatus';
 import { Room } from '../../classes/render/Room';
 import { AppError } from '../../classes/error/app-error';
+import { ValidationType } from '../../classes/enum/ValidationType';
+import { LoginAlert } from '../../classes/formAlert/LoginAlert';
 
 @Component({
   selector: 'app-login',
@@ -19,13 +21,36 @@ export class LoginComponent implements OnInit {
   private AlertType = AlertType;
 
   private loginForm: LoginForm = new LoginForm();
+  private loginAlerts: LoginAlert = new LoginAlert();
   private rooms: Array<Room> = new Array<Room>();
-  private requireOtp: boolean = false;;
+  private requireOtp: boolean = false;
 
   constructor(
     private loginService: LoginService,
     private router: Router
-  ) { }
+  ) {
+    this.loginAlerts = {
+      mobile: {
+        activityType: { show: 0, type: null, text: null },
+        validation: [
+          { validationType: ValidationType.REQUIRED, text: 'Mobile is Required.' },
+          { validationType: ValidationType.VALID, text: 'Mobile must be Valid.' }
+        ]
+      },
+      password: {
+        activityType: { show: 0, type: null, text: null },
+        validation: [{ validationType: ValidationType.REQUIRED, text: 'Password is Required.' }]
+      },
+      roomId: {
+        activityType: { show: 0, type: null, text: null },
+        validation: [{ validationType: ValidationType.REQUIRED, text: 'Room is Required.' }]
+      },
+      otp: {
+        activityType: { show: 0, type: null, text: null },
+        validation: [{ validationType: ValidationType.REQUIRED, text: 'OTP is Required.' }]
+      }
+    };
+  }
 
   ngOnInit() { }
 
@@ -42,7 +67,7 @@ export class LoginComponent implements OnInit {
   }
 
   login(formLogin) {
-    this.loginForm = formLogin.value
+
     this.formAlert.type = AlertType.INFO;
     this.formAlert.text = 'Saving Data. Please wait.';
 
@@ -57,8 +82,41 @@ export class LoginComponent implements OnInit {
               this.requireOtp = false;
 
             case HttpStatus.BAD_REQUEST:
+
               this.formAlert.type = AlertType.DANGER;
               this.formAlert.text = response.message;
+
+              if (response.data.validationError) {
+
+                Object.keys(response.data.validationError).forEach(element => {
+
+                  if (response.data.validationError[element].length) {
+
+                    response.data.validationError[element].forEach(resElement => {
+
+                      if (this.loginAlerts[element].validation.length) {
+                        let index = this.loginAlerts[element].validation.findIndex(x => x.validationType == resElement.validationType);
+                        this.loginAlerts[element].validation[index].text = resElement.text;
+                      } else {
+                        if (this.loginAlerts[element].validation.validationType == resElement.validationType)
+                          this.loginAlerts[element].validation.text = resElement.text;
+                      }
+
+                    });
+
+                  } else {
+
+                    if (this.loginAlerts[element].validation.length) {
+                      let index = this.loginAlerts[element].validation.findIndex(x => x.validationType == response.data.validationError[element].validationType);
+                      this.loginAlerts[element].validation[index].text = response.data.validationError[element].text;
+                    } else
+                      this.loginAlerts[element].validation.text = response.data.validationError[element].text;
+
+                  }
+                });
+
+              }
+
 
             case HttpStatus.OK:
               if ('multipleRooms' in response.data) {

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Alert } from '../../classes/render/Alert';
 import { AlertType } from '../../classes/enum/AlertType';
 import { SocietyRegistrationForm } from '../../classes/io/SocietyRegistrationForm';
+import { ValidationType } from '../../classes/enum/ValidationType';
+import { SocietyRegistrationAlert } from '../../classes/formAlert/SocietyRegistrationAlert';
 
 @Component({
   selector: 'app-society-registration',
@@ -14,22 +16,60 @@ export class SocietyRegistrationComponent implements OnInit {
   private AlertType = AlertType;
 
   private societyRegistrationForm: SocietyRegistrationForm = new SocietyRegistrationForm();
+  private societyRegistrationAlerts: SocietyRegistrationAlert = new SocietyRegistrationAlert();
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {
+
+    this.societyRegistrationAlerts = {
+      name: {
+        activityType: { show: 0, type: null, text: null },
+        validation: [{ validationType: ValidationType.REQUIRED, text: 'Name is Mandatory.' }],
+      },
+      wingCount: {
+        activityType: { show: 0, type: null, text: null },
+        validation: [{ validationType: ValidationType.REQUIRED, text: 'Wings is Mandatory.' }],
+      },
+      wings: {
+        name: {
+          activityType: { show: 0, type: null, text: null },
+          validation: [{ validationType: ValidationType.REQUIRED, text: 'Wing is Mandatory.' }],
+        },
+        room: {
+          activityType: { show: 0, type: null, text: null },
+          validation: [{ validationType: ValidationType.REQUIRED, text: 'Room is Mandatory.' }],
+        }
+      },
+      secretary: {
+        wing: {
+          activityType: { show: 0, type: null, text: null },
+          validation: [{ validationType: ValidationType.REQUIRED, text: 'Secretary Wing is Mandatory.' }],
+        },
+        room: {
+          activityType: { show: 0, type: null, text: null },
+          validation: [{ validationType: ValidationType.REQUIRED, text: 'Secretary Room is Mandatory.' }],
+        },
+        mobile: {
+          activityType: { show: 0, type: null, text: null },
+          validation: [{ validationType: ValidationType.REQUIRED, text: 'Secretary Mobile is Mandatory.' }],
+        }
+      }
+    };
+
+  }
 
   getWingDom(): void {
     this.societyRegistrationForm.wings = null;
     this.societyRegistrationForm.wings = [{name: '', room: ''}];
 
-    for(let i = 1;i < this.societyRegistrationForm.wingCount;i++) {
+    for (let i = 1; i < Number(this.societyRegistrationForm.wingCount); i++) {
       this.societyRegistrationForm.wings.push({name: '', room: ''});
     }
   }
 
   register(formSocietyRegistration): void {
-    console.log(formSocietyRegistration.value);
+    console.log(this.societyRegistrationForm);
   }
 
 }

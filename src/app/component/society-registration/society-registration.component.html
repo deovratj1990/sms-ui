@@ -10,40 +10,31 @@
         <label for="name" class="col-form-label">Name</label>
         <input type="text" id="name" name="name" [(ngModel)]="societyRegistrationForm.name" #name="ngModel" class="form-control"
           placeholder="Name" required pattern="[A-Za-z]+">
-        <div class="text-danger" *ngIf="!name.valid">
-          <small *ngIf="!name.value">Name is Required.</small>
-          <small *ngIf="name.value">Name must be Valid.</small>
-        </div>
+        <app-validation-error [element]="societyRegistrationAlerts.name" [model]="name"></app-validation-error>
       </div>
 
       <div class="form-group text-left col-sm-8 col-md-4 col-lg-3">
-        <label for="wings">Wings</label>
-        <input type="number" id="wings" name="wings" [(ngModel)]="societyRegistrationForm.wingCount" #wings="ngModel" class="form-control"
-          placeholder="Wings" required (ngModelChange)="getWingDom()">
-          <div class="text-danger" *ngIf="!wings.valid">
-            <small>Wings is Required.</small>
-          </div>
+        <label for="wingCount">Wings</label>
+        <input type="number" id="wingCount" name="wingCount" [(ngModel)]="societyRegistrationForm.wingCount" #wingCount="ngModel"
+          class="form-control" placeholder="Wings" required (ngModelChange)="getWingDom()" pattern="[0-9]+">
+        <app-validation-error [element]="societyRegistrationAlerts.wingCount" [model]="wingCount"></app-validation-error>
       </div>
 
       <div class="form-group row" *ngIf="societyRegistrationForm.wingCount">
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 pt-3 mx-auto" *ngFor="let s of societyRegistrationForm.wings; let i = index;">
-          <input type="text" id="wingName[{{i}}]" name="wingName[{{i}}]" [(ngModel)]="s.name" #wingName="ngModel" class="form-control"
+          <input type="text" id="wingName[{{i}}]" name="wingName[{{i}}]" [(ngModel)]="s.name" #wing="ngModel" class="form-control"
             placeholder="Wing" required pattern="[A-Za-z0-9]+">
-
-          <input type="text" id="wingRoom[{{i}}]" name="wingRoom[{{i}}]" [(ngModel)]="s.room" #wingRoom="ngModel" class="form-control"
+          <input type="text" id="wingRoom[{{i}}]" name="wingRoom[{{i}}]" [(ngModel)]="s.room" #room="ngModel" class="form-control"
             placeholder="Room" required pattern="[A-Za-z0-9]+">
-
-          <div class="text-danger">
-            <small *ngIf="!wingName.valid">Wing is Required.</small>
-            <small *ngIf="!wingRoom.valid">Room is Required.</small>
-          </div>
-
+          <app-validation-error [element]="societyRegistrationAlerts.wings.name" [model]="wing"></app-validation-error>
+          <app-validation-error [element]="societyRegistrationAlerts.wings.room" [model]="room"></app-validation-error>
         </div>
       </div>
 
       <div class="form-group text-right col-sm-6 col-md-4 col-lg-3">
         <div class="btn-group" role="group">
           <button class="btn btn-primary btn-sm" type="submit" [disabled]="!formSocietyRegistration.valid">Register</button>
+          <button class="btn btn-primary btn-sm" type="button" routerLink="/login" routerLinkActive="active">Back</button>
         </div>
       </div>
 

@@ -4,31 +4,22 @@
     <h5 class="card-header">Login</h5>
     <div class="card-body">
 
-      <app-alert-response [formAlert]="formAlert"></app-alert-response>
+      <div class="col-lg-12">
+        <app-alert-response [formAlert]="formAlert"></app-alert-response>
+      </div>
 
       <div class="form-group text-left">
         <label for="mobile" class="col-form-label">Mobile</label>
-        <input type="number" id="mobile" [(ngModel)]="loginForm.mobile" #mobile="ngModel" name="mobile" class="form-control" placeholder="Mobile"
+        <input type="text" id="mobile" [(ngModel)]="loginForm.mobile" #mobile="ngModel" name="mobile" class="form-control" placeholder="Mobile"
           required pattern="[7-9]{1}[0-9]{9}" (ngModelChange)="detectChanges('mobile')">
-        <div *ngIf="!mobile.valid">
-          <div class="text-danger" *ngIf="!mobile.value">
-            <small>Mobile is Required.</small>
-          </div>
-          <div class="text-danger" *ngIf="mobile.value">
-            <small>Mobile must be Valid.</small>
-          </div>
-        </div>
+        <app-validation-error [element]="loginAlerts.mobile" [model]="mobile"></app-validation-error>
       </div>
 
       <div class="form-group text-left">
         <label for="password">Password</label>
         <input type="password" id="password" [(ngModel)]="loginForm.password" #password="ngModel" name="password" class="form-control"
           placeholder="Password" required>
-        <div *ngIf="!password.valid">
-          <div class="text-danger" *ngIf="!password.value">
-            <small>Password is Required.</small>
-          </div>
-        </div>
+        <app-validation-error [element]="loginAlerts.password" [model]="password"></app-validation-error>
       </div>
 
       <div class="form-group text-left" *ngIf="rooms.length > 0">
@@ -37,22 +28,14 @@
           <option value="">-Select-</option>
           <option *ngFor="let room of rooms" [value]="room.id"> {{ room.name }} </option>
         </select>
-        <div *ngIf="!roomId.valid">
-          <div class="text-danger" *ngIf="!roomId.value">
-            <small>Room is Required.</small>
-          </div>
-        </div>
+        <app-validation-error [element]="loginAlerts.roomId" [model]="roomId"></app-validation-error>
       </div>
 
       <div class="form-group text-left" *ngIf="requireOtp">
         <label for="otp">OTP</label>
-        <input type="number" id="otp" [(ngModel)]="loginForm.otp" #otp="ngModel" name="otp" class="form-control" placeholder="OTP"
+        <input type="text" id="otp" [(ngModel)]="loginForm.otp" #otp="ngModel" name="otp" class="form-control" placeholder="OTP"
           required>
-        <div *ngIf="!otp.valid">
-          <div class="text-danger" *ngIf="!otp.value">
-            <small>OTP is Required.</small>
-          </div>
-        </div>
+        <app-validation-error [element]="loginAlerts.otp" [model]="otp"></app-validation-error>
       </div>
 
       <div class="form-group text-right">

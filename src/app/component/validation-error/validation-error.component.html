@@ -1,14 +1,29 @@
-<small 
-    *ngIf="element.activityType?.show == 1"
-    class="d-block"
-    [ngClass]="{
-        'text-info': element.activityType?.type === AlertType.INFO,
-        'text-success': element.activityType?.type === AlertType.SUCCESS,
-        'text-danger': element.activityType?.type === AlertType.DANGER,
-        'text-warning': element.activityType?.type === AlertType.WARNING
+<small *ngIf="element.activityType.show == 1" class="d-block" [ngClass]="{
+        'text-info': element.activityType.type === AlertType.INFO,
+        'text-success': element.activityType.type === AlertType.SUCCESS,
+        'text-danger': element.activityType.type === AlertType.DANGER,
+        'text-warning': element.activityType.type === AlertType.WARNING
     }">
-    {{ element.activityType?.text }}
+    {{ element.activityType.text }}
 </small>
-<small class="d-block text-danger" *ngIf="element.activityType?.show == 0">
-    {{ element.validation?.text }}
-</small>
+<div *ngIf="element.activityType.show == 0">
+    <div *ngFor="let div of element.validation">
+        <div [ngSwitch]="div.validationType">
+            <div *ngSwitchCase="ValidationType.REQUIRED">
+                <small class="d-block text-danger" *ngIf="!model.valid && !model.value">
+                    {{ div.text }}
+                </small>
+            </div>
+            <div *ngSwitchCase="ValidationType.VALID">
+                <small class="d-block text-danger" *ngIf="!model.valid && model.value">
+                    {{ div.text }}
+                </small>
+            </div>
+            <div *ngSwitchCase="ValidationType.MATCH">
+                    <small class="d-block text-danger" *ngIf=" model.value && matchField.value != model.value">
+                    {{ div.text }}
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
