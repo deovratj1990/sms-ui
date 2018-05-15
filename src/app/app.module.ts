@@ -5,29 +5,28 @@ import { HttpModule } from '@angular/http';
 import { FormsModule }   from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './component/header/header.component';
-import { DashboardComponent } from './component/dashboard/dashboard.component';
-import { ManageCostHeaderComponent } from './component/manage-cost-header/manage-cost-header.component';
-import { ManageTransactionDefinitionComponent } from './component/manage-transaction-definition/manage-transaction-definition.component';
-import { ManageVoucherComponent } from './component/manage-voucher/manage-voucher.component';
-import { LoginComponent } from './component/login/login.component';
-import { MemberRegistrationComponent } from './component/member-registration/member-registration.component';
-import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
-import { AlertResponseComponent } from './component/alert-response/alert-response.component';
-import { ValidationErrorComponent } from './component/validation-error/validation-error.component';
 
-import { AppErrorHandler } from './classes/error/app-error-handler';
-
-import { AuthGuard } from './service/auth-guard.service';
-import { LoginService } from './service/login.service';
-import { MemberRegistrationService } from './service/member-registration.service';
-import { SocietyService } from './service/society.service';
-import { RoomService } from './service/room.service';
-import { CostHeaderService } from './service/costHeader.service';
-import { TransactionDefinitionService } from './service/transactionDefinition.service';
+import { AppErrorHandler } from './class/error/app-error-handler';
 
 import { MyDatePickerModule } from 'mydatepicker';
-import { SocietyRegistrationComponent } from './component/society-registration/society-registration.component';
+import { HeaderComponent } from './common/header/component/header.component';
+import { DashboardComponent } from './common/dashboard/component/dashboard.component';
+import { LoginComponent } from './user/login/component/login.component';
+import { MemberRegistrationComponent } from './user/member-registration/component/member-registration.component';
+import { CostHeaderComponent } from './accounting/cost-header/component/cost-header.component';
+import { TransactionDefinitionComponent } from './accounting/transaction/definition/component/transaction-definition.component';
+import { PageNotFoundComponent } from './common/page-not-found/component/page-not-found.component';
+import { AlertComponent } from './common/alert/component/alert.component';
+import { ValidationErrorComponent } from './common/validation-error/component/validation-error.component';
+
+import { LoginService } from './user/login/service/LoginService';
+import { AuthGuard } from './common/auth/class/AuthService';
+import { SocietyService } from './society/service/SocietyService';
+import { RoomService } from './society/wing/room/service/RoomService';
+import { MemberRegistrationService } from './user/member-registration/service/MemberRegistrationService';
+import { CostHeaderService } from './accounting/cost-header/service/CostHeaderService';
+import { TransactionDefinitionService } from './accounting/transaction/definition/service/TransactionDefinitionService';
+import { StaticFormContentService} from "./common/staticFormContent/service/StaticFormContentService";
 
 
 @NgModule({
@@ -36,13 +35,11 @@ import { SocietyRegistrationComponent } from './component/society-registration/s
     HeaderComponent,
     LoginComponent,
     MemberRegistrationComponent,
-    SocietyRegistrationComponent,
     DashboardComponent,
-    ManageCostHeaderComponent,
-    ManageTransactionDefinitionComponent,
-    ManageVoucherComponent,
+    CostHeaderComponent,
+    TransactionDefinitionComponent,
     PageNotFoundComponent,
-    AlertResponseComponent,
+    AlertComponent,
     ValidationErrorComponent,
   ],
   imports: [
@@ -60,6 +57,7 @@ import { SocietyRegistrationComponent } from './component/society-registration/s
     MemberRegistrationService,
     CostHeaderService,
     TransactionDefinitionService,
+    StaticFormContentService,
     { provide: AppErrorHandler, useClass: ErrorHandler }
   ],
   bootstrap: [AppComponent]

@@ -1,0 +1,49 @@
+<form #formLogin="ngForm" (ngSubmit)="login(formLogin)">
+
+  <div class="card col-sm-8 col-md-6 col-lg-4 p-0 mt-3">
+    <h5 class="card-header">Login</h5>
+    <div class="card-body">
+
+      <div class="col-lg-12">
+        <app-alert [alert]="formAlert"></app-alert>
+      </div>
+
+      <div class="form-group text-left">
+        <label for="mobile" class="col-form-label">Mobile</label>
+        <input type="text" id="mobile" [(ngModel)]="loginForm.mobile" #mobile="ngModel" name="mobile" class="form-control" placeholder="Mobile"
+          required pattern="[7-9]{1}[0-9]{9}" (ngModelChange)="detectChanges('mobile')">
+        <app-validation-error [element]="loginAlerts.mobile" [model]="mobile"></app-validation-error>
+      </div>
+
+      <div class="form-group text-left">
+        <label for="password">Password</label>
+        <input type="password" id="password" [(ngModel)]="loginForm.password" #password="ngModel" name="password" class="form-control"
+          placeholder="Password" required>
+        <app-validation-error [element]="loginAlerts.password" [model]="password"></app-validation-error>
+      </div>
+
+      <div class="form-group text-left" *ngIf="rooms.length > 0">
+        <label for="roomId">Room</label>
+        <select class="form-control" id="roomId" [(ngModel)]="loginForm.roomId" #roomId="ngModel" name="roomId" required (ngModelChange)="detectChanges('roomId')">
+          <option value="">-Select-</option>
+          <option *ngFor="let room of rooms" [value]="room.id"> {{ room.name }} </option>
+        </select>
+        <app-validation-error [element]="loginAlerts.roomId" [model]="roomId"></app-validation-error>
+      </div>
+
+      <div class="form-group text-left" *ngIf="requireOtp">
+        <label for="otp">OTP</label>
+        <input type="text" id="otp" [(ngModel)]="loginForm.otp" #otp="ngModel" name="otp" class="form-control" placeholder="OTP"
+          required>
+        <app-validation-error [element]="loginAlerts.otp" [model]="otp"></app-validation-error>
+      </div>
+
+      <div class="form-group text-right">
+          <button class="btn btn-outline-primary btn-sm" type="submit" [disabled]="!formLogin.valid">Login</button>
+          <button class="btn btn-outline-primary btn-sm" type="button" routerLink="/member-registration">Member Registration</button>
+      </div>
+
+    </div>
+  </div>
+
+</form>
