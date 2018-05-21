@@ -20,7 +20,12 @@
                 </small>
             </div>
             <div *ngSwitchCase="ValidationType.MATCH">
-                    <small class="d-block text-danger" *ngIf=" model.value && matchField.value != model.value">
+                <small class="d-block text-danger" *ngIf="model.value && matchField.value != model.value">
+                    {{ div.text }}
+                </small>
+            </div>
+            <div *ngSwitchCase="ValidationType.NOT_SAME">
+                <small class="d-block text-danger" *ngIf="model.value && matchField.value == model.value">
                     {{ div.text }}
                 </small>
             </div>

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, Headers } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
+import { RequestOptions, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 
@@ -17,7 +18,7 @@ export class MemberRegistrationService {
   private url: string;
   private options = new RequestOptions();
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
     if (Config.API_TYPE == 'PHP')
       this.url = Config.API_URL + this.reqMap + '.php?action=';
     else
@@ -30,7 +31,7 @@ export class MemberRegistrationService {
 
   registration(payload): Observable<ApiResponse> {
     return this.http.post(this.url + 'register', JSON.stringify(payload))//, this.options)
-      .map(response => response.json())
+      .map(response => response)
       .catch(this.handleError)
   }
 

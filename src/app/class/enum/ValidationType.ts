@@ -1,5 +1,6 @@
 export enum ValidationType {
     REQUIRED,
     VALID,
-    MATCH
+    MATCH,
+    NOT_SAME,
 }

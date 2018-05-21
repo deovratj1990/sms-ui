@@ -2,8 +2,9 @@ import { FormElement } from "../../../../class/common/FormElement";
 
 export class TransactionDefinitionAlert {
   costHeader: FormElement;
-  holderType: FormElement;
   interval: FormElement;
+  transactionFrom: FormElement;
+  transactionTo: FormElement;
   amount: FormElement;
-  from: FormElement;
+  fromDate: FormElement;
 }

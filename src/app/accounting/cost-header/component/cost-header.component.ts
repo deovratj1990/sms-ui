@@ -25,8 +25,7 @@ export class CostHeaderComponent implements OnInit {
   private costHeaderAlert: CostHeaderAlert = new CostHeaderAlert();
   private costHeaders: Array<CostHeader> = new Array<CostHeader>();
 
-  constructor(private costHeaderService: CostHeaderService) {
-  }
+  constructor(private costHeaderService: CostHeaderService) { }
 
   ngOnInit() {
     this.costHeaderAlert = {

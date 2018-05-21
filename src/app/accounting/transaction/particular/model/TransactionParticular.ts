@@ -1,6 +1,7 @@
+import { CostHeader } from "../../../cost-header/model/CostHeader";
+
 export class TransactionParticular {
     id: number;
-    tdId: number;
-    name: string;
+    costHeader: CostHeader;
     amount: number;
 }

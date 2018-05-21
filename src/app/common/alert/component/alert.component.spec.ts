@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AlertResponseComponent } from './alert-response.component';
+import { AlertResponseComponent } from './alert.component';
 
 describe('AlertResponseComponent', () => {
   let component: AlertResponseComponent;

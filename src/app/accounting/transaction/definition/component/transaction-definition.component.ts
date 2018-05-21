@@ -1,18 +1,17 @@
-import {Component, OnInit} from '@angular/core';
-import {IMyDpOptions} from 'mydatepicker';
-import {Alert} from '../../../../class/common/Alert';
-import {ValidationType} from '../../../../class/enum/ValidationType';
-import {TransactionDefinition} from '../model/TransactionDefinition';
-import {TransactionDefinitionAlert} from '../model/TransactionDefinitionAlert';
-import {CostHeader} from '../../../cost-header/model/CostHeader';
-import {TransactionParticular} from '../../particular/model/TransactionParticular';
-import {CostHeaderService} from '../../../cost-header/service/CostHeaderService';
-import {TransactionDefinitionService} from '../service/TransactionDefinitionService';
-import {AlertType} from '../../../../class/enum/AlertType';
-import {HttpStatus} from '../../../../class/common/HttpStatus';
-import {AppError} from '../../../../class/error/app-error';
-import {StaticFormContentService} from "../../../../common/staticFormContent/service/StaticFormContentService";
-import {StaticFormContent} from "../../../../common/staticFormContent/model/StaticFormContent";
+import { Component, OnInit } from '@angular/core';
+import { Alert } from '../../../../class/common/Alert';
+import { ValidationType } from '../../../../class/enum/ValidationType';
+import { TransactionDefinition } from '../model/TransitionDefinition';
+import { TransactionDefinitionAlert } from '../model/TransactionDefinitionAlert';
+import { CostHeader } from '../../../cost-header/model/CostHeader';
+import { TransactionParticular } from '../../particular/model/TransactionParticular';
+import { CostHeaderService } from '../../../cost-header/service/CostHeaderService';
+import { TransactionDefinitionService } from '../service/TransactionDefinitionService';
+import { AlertType } from '../../../../class/enum/AlertType';
+import { HttpStatus } from '../../../../class/common/HttpStatus';
+import { AppError } from '../../../../class/error/app-error';
+import { StaticFormContentService } from '../../../../common/staticFormContent/service/StaticFormContentService';
+import { type } from 'os';
 
 @Component({
   selector: 'app-transaction-definition',
@@ -27,143 +26,63 @@ export class TransactionDefinitionComponent implements OnInit {
   private listAlert: Alert = new Alert();
   private ValidationType = ValidationType;
 
-  private transactionDefinition: TransactionDefinition = new TransactionDefinition();
   private transactionDefinitionAlerts: TransactionDefinitionAlert = new TransactionDefinitionAlert();
+  private transactionDefinitionForm: TransactionDefinition = new TransactionDefinition();
+  private transactionDefinitionDetail: TransactionDefinition = new TransactionDefinition();
   private transactionDefinitions: Array<TransactionDefinition> = new Array<TransactionDefinition>();
 
   private costHeaders: Array<CostHeader> = new Array<CostHeader>();
   private particulars: Array<TransactionParticular> = new Array<TransactionParticular>();
 
-  currentDate = new Date().toLocaleDateString().split('/');
-  formatDate: any = {
-    year: this.currentDate[2],
-    month: this.currentDate[0],
-    day: this.currentDate[1]
-  }
-
-  myDatePickerOptions: IMyDpOptions = {
-    // other options...
-    dateFormat: 'dd/mm/yyyy',
-    disableWeekends: true,
-    showTodayBtn: false,
-    disableUntil: this.formatDate,
-    openSelectorTopOfInput: true,
-    showSelectorArrow: false
-  };
+  private currentDate = new Date().toLocaleDateString().split('/');
+  private formatDate: string = this.currentDate[2] + '-' + String("00" + this.currentDate[0]).slice(-2) + '-' + String("00" + this.currentDate[1]).slice(-2);
 
   constructor(
     private costHeaderService: CostHeaderService,
     private transactionDefinitionService: TransactionDefinitionService,
     private _staticFormContentService: StaticFormContentService
-  ) {
-  }
+  ) { }
 
   ngOnInit() {
-
     this.transactionDefinitionAlerts = {
       costHeader: {
-        activityType: {show: 1, type: AlertType.INFO, text: 'Fetching Data. Please wait.'},
+        activityType: { show: 1, type: AlertType.INFO, text: 'Fetching Data. Please wait.' },
         validation: [
-          {validationType: ValidationType.REQUIRED, text: 'Cost Header is Mandatory.'}
+          { validationType: ValidationType.REQUIRED, text: 'Cost Header is Mandatory.' }
         ]
       },
-      holderType: {
-        activityType: {show: 1, type: AlertType.INFO, text: 'Fetching Data. Please wait.'},
+      transactionFrom: {
+        activityType: { show: 1, type: AlertType.INFO, text: 'Fetching Data. Please wait.' },
         validation: [
-          {validationType: ValidationType.REQUIRED, text: 'Applicable To is Mandatory.'}
+          { validationType: ValidationType.REQUIRED, text: 'Transaction From is Mandatory.' }
+        ]
+      },
+      transactionTo: {
+        activityType: { show: 1, type: AlertType.INFO, text: 'Fetching Data. Please wait.' },
+        validation: [
+          { validationType: ValidationType.REQUIRED, text: 'Transaction To is Mandatory.' },
+          { validationType: ValidationType.NOT_SAME, text: 'Transaction From & To must not be Same.' }
         ]
       },
       interval: {
-        activityType: {show: 1, type: AlertType.INFO, text: 'Fetching Data. Please wait.'},
+        activityType: { show: 1, type: AlertType.INFO, text: 'Fetching Data. Please wait.' },
         validation: [
-          {validationType: ValidationType.REQUIRED, text: 'Interval is Mandatory.'}
+          { validationType: ValidationType.REQUIRED, text: 'Interval is Mandatory.' }
         ]
       },
       amount: {
-        activityType: {show: 0, type: null, text: null},
+        activityType: { show: 0, type: null, text: null },
         validation: [
-          {validationType: ValidationType.REQUIRED, text: 'Amount is Mandatory.'}
+          { validationType: ValidationType.REQUIRED, text: 'Amount is Mandatory.' }
         ]
       },
-      from: {
-        activityType: {show: 0, type: null, text: null},
-        validation: [
-          {validationType: ValidationType.REQUIRED, text: 'Date is Mandatory.'}
-        ]
+      fromDate: {
+        activityType: { show: 0, type: null, text: null },
+        validation: []
       }
     };
 
-    this.getStaticContent();
-    this.getCostHeaders();
-
-    //this.getTransactionDefinitions();
-  }
-
-  getStaticContent() {
-    this._staticFormContentService.StaticFormContent()
-      .subscribe(response => {
-          this._staticFormContentService.staticFormContent = response;
-          if (this._staticFormContentService.staticFormContent.applicableTo.length == 0) {
-            this.transactionDefinitionAlerts.holderType.activityType.show = 1;
-          } else {
-            this.transactionDefinitionAlerts.holderType.activityType.show = 0;
-          }
-
-          if (this._staticFormContentService.staticFormContent.intervals.length == 0) {
-            this.transactionDefinitionAlerts.interval.activityType.show = 1;
-          } else {
-            this.transactionDefinitionAlerts.interval.activityType.show = 0;
-          }
-
-        },
-        (error: AppError) => {
-          this.transactionDefinitionAlerts.holderType.activityType.show = 1;
-          this.transactionDefinitionAlerts.holderType.activityType.type = AlertType.DANGER;
-          this.transactionDefinitionAlerts.holderType.activityType.text = 'Something went wrong.';
-          ;
-
-          this.transactionDefinitionAlerts.interval.activityType.show = 1;
-          this.transactionDefinitionAlerts.interval.activityType.type = AlertType.DANGER;
-          this.transactionDefinitionAlerts.interval.activityType.text = 'Something went wrong.';
-          ;
-        });
-  }
-
-  getCostHeaders(): void {
-
-    this.costHeaderService.getAll()
-      .subscribe(
-        response => {
-          if (response.code === HttpStatus.OK || response.code === HttpStatus.NO_CONTENT) {
-            if (response.code === HttpStatus.OK) {
-              this.costHeaders = response.data.costHeaders;
-
-              response.data.costHeaders.forEach((item, index) => {
-                let particular: TransactionParticular = new TransactionParticular();
-
-                particular.id = item.id;
-                particular.name = item.name;
-                particular.amount = null;
-
-                this.transactionDefinition.particulars.push(particular);
-              });
-            }
-
-            this.transactionDefinitionAlerts.costHeader.activityType.show = 0;
-            return false
-          }
-
-          this.transactionDefinitionAlerts.costHeader.activityType.show = 1;
-          this.transactionDefinitionAlerts.costHeader.activityType.type = AlertType.DANGER;
-          this.transactionDefinitionAlerts.costHeader.activityType.text = 'Something went wrong.';
-          ;
-        },
-        (error: AppError) => {
-          this.transactionDefinitionAlerts.costHeader.activityType.show = 1;
-          this.transactionDefinitionAlerts.costHeader.activityType.type = AlertType.DANGER;
-          this.transactionDefinitionAlerts.costHeader.activityType.text = 'Something went wrong.';
-          ;
-        });
+    this.getTransactionDefinitions();
   }
 
   getTransactionDefinitions(): void {
@@ -172,48 +91,119 @@ export class TransactionDefinitionComponent implements OnInit {
 
     this.transactionDefinitionService.getAll()
       .subscribe(
-        response => {
-          if (response.code === HttpStatus.OK || response.code === HttpStatus.NO_CONTENT) {
-            if (response.code === HttpStatus.OK)
-              this.transactionDefinition = response.data.transactionDefinitions;
+      response => {
+        if (response.code === HttpStatus.OK || response.code === HttpStatus.NO_CONTENT) {
+          if (response.code === HttpStatus.OK) {
+            this.transactionDefinitions = response.data.transactionDefinitions;
+          }
+          this.listAlert.text = '';
+          return false;
+        }
 
-            this.listAlert.type = AlertType.SUCCESS;
-            this.listAlert.text = response.message;
+        this.listAlert.type = AlertType.DANGER;
+        this.listAlert.text = 'Something went wrong.';
+      },
+      (error: AppError) => {
+        this.listAlert.type = AlertType.DANGER;
+        this.listAlert.text = 'Something went wrong.';
+      });
+  }
+
+  getCostHeaders(): void {
+    this.transactionDefinitionForm.particulars = [];
+    this.costHeaderService.getAll()
+      .subscribe(
+      response => {
+        if (response.code === HttpStatus.OK || response.code === HttpStatus.NO_CONTENT) {
+          if (response.code === HttpStatus.OK) {
+            this.costHeaders = response.data.costHeaders;
+
+            response.data.costHeaders.forEach((item, index) => {
+              let particular: TransactionParticular = new TransactionParticular();
+
+              particular.id = null;
+              particular.costHeader = item;
+              particular.amount = null;
+
+              this.transactionDefinitionForm.particulars.push(particular);
+            });
+            this.uiActivity('costHeader', 0);
+            return false;
+          }
+        }
+        this.uiActivity('costHeader', 1, AlertType.DANGER, 'Something went wrong.');
+      },
+      (error: AppError) => {
+        this.uiActivity('costHeader', 1, AlertType.DANGER, 'Something went wrong.');
+      });
+  }
+
+  getStaticContent() {
+    this._staticFormContentService.StaticFormContent()
+      .subscribe(response => {
+        if (response.code === HttpStatus.OK || response.code === HttpStatus.NO_CONTENT) {
+          if (response.code === HttpStatus.OK) {
+            this._staticFormContentService.staticFormContent = response.data;
+
+            if (this._staticFormContentService.staticFormContent.intervals.length == 0) {
+              this.uiActivity('interval', 0);
+            } else {
+              this.uiActivity('interval', 0);
+            }
+
+            if (this._staticFormContentService.staticFormContent.accountTypes.length == 0) {
+              this.uiActivity('transactionFrom', 1);
+              this.uiActivity('transactionTo', 1);
+            } else {
+              this.uiActivity('transactionFrom', 0);
+              this.uiActivity('transactionTo', 0);
+            }
             return false;
           }
 
-          this.listAlert.type = AlertType.DANGER
-          this.listAlert.text = 'Something went wrong.';
-        },
-        (error: AppError) => {
-          this.listAlert.type = AlertType.DANGER
-          this.listAlert.text = 'Something went wrong.';
-        });
+          this.uiActivity('interval', 1, AlertType.DANGER, response.message);
+          this.uiActivity('transactionFrom', 1, AlertType.DANGER, response.message);
+          this.uiActivity('transactionTo', 1, AlertType.DANGER, response.message);
+          return false;
+        }
+
+        this.uiActivity('interval', 1, AlertType.DANGER, 'Something went wrong.');
+        this.uiActivity('transactionFrom', 1, AlertType.DANGER, 'Something went wrong.');
+        this.uiActivity('transactionTo', 1, AlertType.DANGER, 'Something went wrong.');
+      },
+      (error: AppError) => {
+        this.uiActivity('interval', 1, AlertType.DANGER, 'Something went wrong.');
+        this.uiActivity('transactionFrom', 1, AlertType.DANGER, 'Something went wrong.');
+        this.uiActivity('transactionTo', 1, AlertType.DANGER, 'Something went wrong.');
+      });
   }
 
   changeHasParticular(element) {
-    this.transactionDefinition.amount = null;
+    this.transactionDefinitionForm.amount = null;
   }
 
   calculateAmount() {
-    if (this.transactionDefinition.chId) {
-      let index = this.transactionDefinition.particulars.findIndex(x => x.id == this.transactionDefinition.chId);
-      this.transactionDefinition.particulars[index].amount = null;
+    if (this.transactionDefinitionForm.costHeader.id) {
+      let index = this.transactionDefinitionForm.particulars.findIndex(x => x.costHeader.id == this.transactionDefinitionForm.costHeader.id);
+      this.transactionDefinitionForm.particulars[index].amount = null;
     }
 
-    this.transactionDefinition.particulars.forEach((item, index) => {
-      if (index == 0)
-        this.transactionDefinition.amount = 0;
-
-      this.transactionDefinition.amount += item.amount;
+    this.transactionDefinitionForm.particulars.forEach((item, index) => {
+      if (index === 0) {
+        this.transactionDefinitionForm.amount = 0;
+      }
+      this.transactionDefinitionForm.amount += item.amount;
     });
 
-    if (this.transactionDefinition.amount == 0) {
-      this.transactionDefinition.amount = null;
+    if (this.transactionDefinitionForm.amount === 0) {
+      this.transactionDefinitionForm.amount = null;
     }
   }
 
   resetForm(formTransactionDefinition) {
+    this.getStaticContent();
+    this.getCostHeaders();
+
     this.transactionDefinitionsId = 0;
     this.formAlert = new Alert();
     formTransactionDefinition.reset();
@@ -221,8 +211,58 @@ export class TransactionDefinitionComponent implements OnInit {
 
   showDetails(id) {
     let index = this.transactionDefinitions.findIndex(x => x.id == id);
-    this.transactionDefinition = this.transactionDefinitions[index];
+    this.transactionDefinitionDetail = this.transactionDefinitions[index];
+  }
 
+  edit(id) {
+    this.getStaticContent();
+    this.getCostHeaders();
+
+    this.listAlert = new Alert();
+
+    this.transactionDefinitionsId = id;
+    this.formAlert.type = AlertType.INFO;
+    this.formAlert.text = 'Fetching Data. Please Wait.';
+
+    this.transactionDefinitionService.getById(this.transactionDefinitionsId)
+      .subscribe(
+      response => {
+        if (response.code === HttpStatus.OK || response.code === HttpStatus.NO_CONTENT) {
+          if (response.code === HttpStatus.OK) {
+
+            Object.keys(response.data.transactionDefinition).forEach(element => {
+              if (element != 'particulars') {
+                this.transactionDefinitionForm[element] = response.data.transactionDefinition[element];
+              } else {
+                response.data.transactionDefinition[element].forEach(ele => {
+
+                  let index = this.transactionDefinitionForm.particulars.findIndex(x => x.costHeader.id == ele.costHeader.id);
+                  if (index >= 0 && this.transactionDefinitionForm.costHeader.id != ele.costHeader.id) {
+                    this.transactionDefinitionForm.particulars[index].id = ele.id;
+                    this.transactionDefinitionForm.particulars[index].amount = ele.amount;
+                  }
+
+                });
+              }
+            });
+
+            this.formAlert.type = AlertType.SUCCESS;
+            this.formAlert.text = response.message;
+            return false;
+          } else {
+            this.formAlert.type = AlertType.DANGER;
+            this.formAlert.text = response.message;
+            return false;
+          }
+        }
+
+        this.formAlert.type = AlertType.DANGER;
+        this.formAlert.text = 'Something went wrong.';
+      },
+      (error: AppError) => {
+        this.formAlert.type = AlertType.DANGER;
+        this.formAlert.text = 'Something went wrong.';
+      });
   }
 
   save(formTransactionDefinition) {
@@ -231,31 +271,82 @@ export class TransactionDefinitionComponent implements OnInit {
     this.formAlert.type = AlertType.INFO;
     this.formAlert.text = 'Saving Data. Please Wait.';
 
-    this.transactionDefinitionService.save(this.transactionDefinition)
+    this.transactionDefinitionService.save(this.transactionDefinitionsId, this.transactionDefinitionForm)
+      .subscribe(
+      response => {
+        if (response.code === HttpStatus.BAD_REQUEST) {
+          this.formAlert.type = AlertType.DANGER;
+          this.formAlert.text = response.message;
+          return false;
+        }
+
+        if (response.code === HttpStatus.CONFLICT) {
+          this.formAlert.type = AlertType.DANGER;
+          this.formAlert.text = response.message;
+          return false;
+        }
+
+        if (response.code === HttpStatus.CREATED) {
+          if (this.transactionDefinitions.findIndex(x => x.id == response.data.id) == -1) {
+            this.transactionDefinitions.splice(0, 0, response.data);
+          } else {
+            let index = this.transactionDefinitions.findIndex(x => x.id == response.data.id);
+            this.transactionDefinitions.splice(index, 1, response.data);
+          }
+
+          this.transactionDefinitionsId = 0;
+          formTransactionDefinition.reset();
+
+          this.formAlert.type = AlertType.SUCCESS;
+          this.formAlert.text = response.message;
+          return false;
+        }
+        
+        this.formAlert.type = AlertType.DANGER;
+        this.formAlert.text = 'Something went wrong.';
+      },
+      (error: AppError) => {
+        this.formAlert.type = AlertType.DANGER;
+        this.formAlert.text = 'Something went wrong.';
+      });
+  }
+
+  delete(id) {
+    this.formAlert = {type: null, text: null};
+
+    this.transactionDefinitionsId = id;
+    this.listAlert.type = AlertType.INFO;
+    this.listAlert.text = 'Deleting Data. Please Wait.';
+
+    this.transactionDefinitionService.delete(this.transactionDefinitionsId)
       .subscribe(
         response => {
-          if (response.code === HttpStatus.CREATED) {
-            if (this.transactionDefinitions.findIndex(x => x.id == response.data.id) == -1) {
-              this.transactionDefinitions.splice(0, 0, response.data);
-            } else {
-              let index = this.transactionDefinitions.findIndex(x => x.id == response.data.id);
-              this.transactionDefinitions.splice(index, 1, response.data);
-            }
-
+          if (response.code === HttpStatus.NO_CONTENT) {
+            let index = this.transactionDefinitions.findIndex(x => x.id == this.transactionDefinitionsId);
+            this.transactionDefinitions.splice(index, 1);
             this.transactionDefinitionsId = 0;
-            formTransactionDefinition.reset();
 
-            this.formAlert.type = AlertType.SUCCESS;
-            this.formAlert.text = response.message;
+            this.listAlert.type = AlertType.SUCCESS;
+            this.listAlert.text = response.message;
             return false;
           }
 
-          this.formAlert.type = AlertType.DANGER;
-          this.formAlert.text = 'Something went wrong.';
+          this.listAlert.type = AlertType.DANGER;
+          this.listAlert.text = "Something went wrong.";
         },
         (error: AppError) => {
-          this.formAlert.type = AlertType.DANGER;
-          this.formAlert.text = 'Something went wrong.';
+          this.listAlert.type = AlertType.DANGER;
+          this.listAlert.text = 'Something went wrong.';
         });
+  }
+
+  uiActivity(element, show?, type?, text?) {
+    this.transactionDefinitionAlerts[element].activityType.show = show;
+    if (type) {
+      this.transactionDefinitionAlerts[element].activityType.type = type;
+    }
+    if (text) {
+      this.transactionDefinitionAlerts[element].activityType.text = text;
+    }
   }
 }

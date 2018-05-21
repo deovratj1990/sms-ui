@@ -43,5 +43,8 @@
     .menu-level-2 > .menu-level-3 > .nav-link:last-child {
         border-bottom: 1px #DCDCDC solid;
     }
+}
 
+a {
+    cursor:pointer;
 }

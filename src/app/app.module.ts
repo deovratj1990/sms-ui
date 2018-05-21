@@ -1,11 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { RoutingModule } from './routerModule/routing.module';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule }   from '@angular/forms';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
-
 import { AppErrorHandler } from './class/error/app-error-handler';
 
 import { MyDatePickerModule } from 'mydatepicker';
@@ -16,7 +15,7 @@ import { MemberRegistrationComponent } from './user/member-registration/componen
 import { CostHeaderComponent } from './accounting/cost-header/component/cost-header.component';
 import { TransactionDefinitionComponent } from './accounting/transaction/definition/component/transaction-definition.component';
 import { PageNotFoundComponent } from './common/page-not-found/component/page-not-found.component';
-import { AlertComponent } from './common/alert/component/alert.component';
+import { AlertResponseComponent } from './common/alert/component/alert.component';
 import { ValidationErrorComponent } from './common/validation-error/component/validation-error.component';
 
 import { LoginService } from './user/login/service/LoginService';
@@ -27,6 +26,8 @@ import { MemberRegistrationService } from './user/member-registration/service/Me
 import { CostHeaderService } from './accounting/cost-header/service/CostHeaderService';
 import { TransactionDefinitionService } from './accounting/transaction/definition/service/TransactionDefinitionService';
 import { StaticFormContentService} from "./common/staticFormContent/service/StaticFormContentService";
+
+import { RequestInteceptor } from './common/interceptor/RequestInterceptor';
 
 
 @NgModule({
@@ -39,13 +40,13 @@ import { StaticFormContentService} from "./common/staticFormContent/service/Stat
     CostHeaderComponent,
     TransactionDefinitionComponent,
     PageNotFoundComponent,
-    AlertComponent,
+    AlertResponseComponent,
     ValidationErrorComponent,
   ],
   imports: [
     BrowserModule,
     RoutingModule,
-    HttpModule,
+    HttpClientModule,
     FormsModule,
     MyDatePickerModule
   ],
@@ -58,7 +59,8 @@ import { StaticFormContentService} from "./common/staticFormContent/service/Stat
     CostHeaderService,
     TransactionDefinitionService,
     StaticFormContentService,
-    { provide: AppErrorHandler, useClass: ErrorHandler }
+    { provide: AppErrorHandler, useClass: ErrorHandler },
+    { provide: HTTP_INTERCEPTORS, useClass: RequestInteceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

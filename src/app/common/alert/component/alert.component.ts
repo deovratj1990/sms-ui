@@ -7,7 +7,7 @@ import { AlertType } from '../../../class/enum/AlertType';
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.css']
 })
-export class AlertComponent implements OnInit {
+export class AlertResponseComponent implements OnInit {
 
   @Input() private alert: Alert;
   private AlertType = AlertType;

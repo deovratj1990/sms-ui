@@ -1,6 +1,6 @@
 import { JwtHelper, tokenNotExpired } from 'angular2-jwt';
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 
@@ -17,7 +17,7 @@ export class LoginService {
   private reqMap: string = 'user';
   private url: string;
 
-  constructor(private http: Http, private router: Router) {
+  constructor(private http: HttpClient, private router: Router) {
     if (Config.API_TYPE == 'PHP')
       this.url = Config.API_URL + this.reqMap + '.php?action=';
     else
@@ -26,12 +26,13 @@ export class LoginService {
 
   login(payload): Observable<ApiResponse> {
     return this.http.post(this.url + 'login', JSON.stringify(payload))
-    .map(response => response.json())
+    .map(response => response)
     .catch(this.handleError);
   }
 
   isLoggedIn() {
     return tokenNotExpired();
+    
   }
 
   get currentUser() {

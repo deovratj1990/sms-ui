@@ -29,6 +29,12 @@ export class LoginComponent implements OnInit {
     private loginService: LoginService,
     private router: Router
   ) {
+
+    if(this.loginService.isLoggedIn()) {
+      router.navigate(['/dashboard']);
+    };
+
+
     this.loginAlerts = {
       mobile: {
         activityType: { show: 0, type: null, text: null },
