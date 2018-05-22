@@ -1,0 +1,64 @@
+<nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+  <a class="navbar-brand" routerLink="/dashboard" routerLinkActive="active">
+    {{ ( loginService.currentUser == null ) ? 'SMS' : loginService.currentUser.societyName }}
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleHeader">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleHeader">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" *ngIf="loginService.isLoggedIn()">
+        <a class="nav-link" data-toggle="collapse" data-target="#account-div" role="button" style="cursor:pointer;">
+          Account's
+          <span class="glyphicon glyphicon-chevron-down pl-2"></span>
+        </a>
+        <div id="account-div" class="collapse menu-level-2">
+          <a class="nav-link p-2" data-toggle="collapse" data-target="#account-manage-div" role="button">
+            Manage Account's
+            <span class="glyphicon glyphicon-chevron-down pl-2"></span>
+          </a>
+          <div id="account-manage-div" class="collapse menu-level-3">
+            <a class="nav-link nav-link-routing p-2" routerLink="/cost-header" routerLinkActive="active">
+              Manage Cost Header's
+            </a>
+            <a class="nav-link nav-link-routing p-2" routerLink="/transaction-definition" routerLinkActive="active">
+              Manage Transaction Definition
+            </a>
+          </div>
+
+          <a class="nav-link p-2" data-toggle="collapse" data-target="#account-pay-div" role="button">
+            Pay
+            <span class="glyphicon glyphicon-chevron-down pl-2"></span>
+          </a>
+          <div id="account-pay-div" class="collapse menu-level-3">
+            <a class="nav-link nav-link-routing p-2" [routerLink]="['/voucher', ptd.id]" routerLinkActive="active"
+              *ngFor="let ptd of payTransactionDefinition">
+              {{ ptd.name | titlecase }}
+            </a>
+          </div>
+
+          <a class="nav-link p-2" data-toggle="collapse" data-target="#account-collect-div" role="button">
+            Collect
+            <span class="glyphicon glyphicon-chevron-down pl-2"></span>
+          </a>
+          <div id="account-collect-div" class="collapse menu-level-3">
+            <a class="nav-link nav-link-routing p-2" [routerLink]="['/voucher', ctd.id]" routerLinkActive="active"
+              *ngFor="let ctd of collectTransactionDefinition">
+              {{ ctd.name | titlecase }}
+            </a>
+          </div>
+
+        </div>
+      </li>
+      <li class="nav-item" *ngIf="!loginService.isLoggedIn()">
+        <a class="nav-link nav-link-routing" routerLink="/login" routerLinkActive="active">Login</a>
+      </li>
+      <li class="nav-item" *ngIf="loginService.isLoggedIn()">
+        <a class="nav-link nav-link-routing" (click)="logout()">Logout</a>
+      </li>
+      <li class="nav-item float-right" *ngIf="loginService.isLoggedIn()">
+        <a class="nav-link nav-link-routing" routerLink="/dashboard" routerLinkActive="active">{{ 'Welcome ' + loginService.currentUser.userName }}</a>
+      </li>
+    </ul>
+  </div>
+</nav>
