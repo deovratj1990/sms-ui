@@ -11,6 +11,7 @@ import { StaticFormContentService } from '../../../service/staticFormContent/Sta
 import { AlertType } from '../../../model/enum/AlertType';
 import { HttpStatus } from '../../../model/common/HttpStatus';
 import { AppError } from '../../../model/error/app-error';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'app-transaction-definition',
@@ -24,10 +25,10 @@ export class TransactionDefinitionComponent implements OnInit {
   private formAlert: Alert = new Alert();
   private listAlert: Alert = new Alert();
   private ValidationType = ValidationType;
-
   private transactionDefinitionAlerts: TransactionDefinitionAlert = new TransactionDefinitionAlert();
   private transactionDefinitionForm: TransactionDefinition = new TransactionDefinition();
   private transactionDefinitionDetail: TransactionDefinition = new TransactionDefinition();
+
   private transactionDefinitions: Array<TransactionDefinition> = new Array<TransactionDefinition>();
 
   private costHeaders: Array<CostHeader> = new Array<CostHeader>();
@@ -287,10 +288,10 @@ export class TransactionDefinitionComponent implements OnInit {
 
         if (response.code === HttpStatus.CREATED) {
           if (this.transactionDefinitions.findIndex(x => x.id == response.data.id) == -1) {
-            this.transactionDefinitions.splice(0, 0, response.data);
+            this.transactionDefinitions.splice(0, 0, response.data['transactionDefinition']);
           } else {
             let index = this.transactionDefinitions.findIndex(x => x.id == response.data.id);
-            this.transactionDefinitions.splice(index, 1, response.data);
+            this.transactionDefinitions.splice(index, 1, response.data['transactionDefinition']);
           }
 
           this.transactionDefinitionsId = 0;
@@ -300,7 +301,7 @@ export class TransactionDefinitionComponent implements OnInit {
           this.formAlert.text = response.message;
           return false;
         }
-        
+
         this.formAlert.type = AlertType.DANGER;
         this.formAlert.text = 'Something went wrong.';
       },
@@ -311,7 +312,7 @@ export class TransactionDefinitionComponent implements OnInit {
   }
 
   delete(id) {
-    this.formAlert = {type: null, text: null};
+    this.formAlert = { type: null, text: null };
 
     this.transactionDefinitionsId = id;
     this.listAlert.type = AlertType.INFO;
@@ -319,24 +320,24 @@ export class TransactionDefinitionComponent implements OnInit {
 
     this.transactionDefinitionService.delete(this.transactionDefinitionsId)
       .subscribe(
-        response => {
-          if (response.code === HttpStatus.NO_CONTENT) {
-            let index = this.transactionDefinitions.findIndex(x => x.id == this.transactionDefinitionsId);
-            this.transactionDefinitions.splice(index, 1);
-            this.transactionDefinitionsId = 0;
+      response => {
+        if (response.code === HttpStatus.NO_CONTENT) {
+          let index = this.transactionDefinitions.findIndex(x => x.id == this.transactionDefinitionsId);
+          this.transactionDefinitions.splice(index, 1);
+          this.transactionDefinitionsId = 0;
 
-            this.listAlert.type = AlertType.SUCCESS;
-            this.listAlert.text = response.message;
-            return false;
-          }
+          this.listAlert.type = AlertType.SUCCESS;
+          this.listAlert.text = response.message;
+          return false;
+        }
 
-          this.listAlert.type = AlertType.DANGER;
-          this.listAlert.text = "Something went wrong.";
-        },
-        (error: AppError) => {
-          this.listAlert.type = AlertType.DANGER;
-          this.listAlert.text = 'Something went wrong.';
-        });
+        this.listAlert.type = AlertType.DANGER;
+        this.listAlert.text = "Something went wrong.";
+      },
+      (error: AppError) => {
+        this.listAlert.type = AlertType.DANGER;
+        this.listAlert.text = 'Something went wrong.';
+      });
   }
 
   uiActivity(element, show?, type?, text?) {
