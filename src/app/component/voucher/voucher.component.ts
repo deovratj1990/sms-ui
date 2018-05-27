@@ -32,7 +32,7 @@ export class VoucherComponent implements OnInit {
     this.route.params.subscribe(
       params => {
          let id= +params['id'];
-         getTrnasactionDefinition(id);
+         //getTrnasactionDefinition(id);
       });
 
 

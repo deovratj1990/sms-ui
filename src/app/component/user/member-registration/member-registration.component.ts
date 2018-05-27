@@ -58,17 +58,6 @@ export class MemberRegistrationComponent implements OnInit {
           { validationType: ValidationType.REQUIRED, text: 'Mobile is Mandatory.' },
           { validationType: ValidationType.VALID, text: 'Mobile must be Valid.' }
         ],
-      },
-      password: {
-        activityType: { show: 0, type: null, text: null },
-        validation: [{ validationType: ValidationType.REQUIRED, text: 'Password is Mandatory.' }],
-      },
-      confirmPassword: {
-        activityType: { show: 0, type: null, text: null },
-        validation: [
-          { validationType: ValidationType.REQUIRED, text: 'Confirm Password is Mandatory.' },
-          { validationType: ValidationType.MATCH, text: 'Confirm Password must match Password.' }
-        ],
       }
     };
 

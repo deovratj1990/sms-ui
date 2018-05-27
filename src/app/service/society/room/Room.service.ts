@@ -22,7 +22,11 @@ export class RoomService {
   }
 
   getRoomsBySocietyId(id): Observable<ApiResponse> {
-    return this.http.get(this.url + 'get&society=' + id)
+    let url: string = '&';
+    if (Config.API_TYPE != 'PHP'){
+      url = '?';
+    }
+    return this.http.get(this.url + 'get' + url + 'society=' + id)
     .map(response => response)
     .catch(this.handleError);
   }

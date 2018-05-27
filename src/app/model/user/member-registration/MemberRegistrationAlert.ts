@@ -5,7 +5,4 @@ export class MemberRegistrationAlert {
     roomId: FormElement;
     name: FormElement; 
     mobile: FormElement;
-    password: FormElement; 
-    confirmPassword: FormElement; 
-
 }

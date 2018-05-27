@@ -4,6 +4,7 @@ export class HttpStatus {
     public static readonly NO_CONTENT: number = 204;
 
     public static readonly BAD_REQUEST: number = 400;
+    public static readonly UNAUTHORIZED: number = 401;
     public static readonly FORBIDDEN: number = 403;
     public static readonly NOT_FOUND: number = 404;
     public static readonly CONFLICT: number = 409;

@@ -22,16 +22,17 @@ export class LoginComponent implements OnInit {
 
   private loginForm: Login = new Login();
   private loginAlerts: LoginAlert = new LoginAlert();
-  private rooms: Array<Room> = new Array<Room>();
 
-  private requireOtp: boolean = false;
+  private rooms: Array<any> = new Array<any>();
 
   constructor(
     private loginService: LoginService,
     private router: Router
   ) {
 
-    if(this.loginService.isLoggedIn()) {
+    this.loginForm.operation = 'ROOM';
+
+    if (this.loginService.isLoggedIn()) {
       router.navigate(['/dashboard']);
     };
 
@@ -44,18 +45,14 @@ export class LoginComponent implements OnInit {
           { validationType: ValidationType.VALID, text: 'Mobile must be Valid.' }
         ]
       },
+      accessId: {
+        activityType: { show: 0, type: null, text: null },
+        validation: [{ validationType: ValidationType.REQUIRED, text: 'Room is Required.' }]
+      },
       password: {
         activityType: { show: 0, type: null, text: null },
         validation: [{ validationType: ValidationType.REQUIRED, text: 'Password is Required.' }]
       },
-      roomId: {
-        activityType: { show: 0, type: null, text: null },
-        validation: [{ validationType: ValidationType.REQUIRED, text: 'Room is Required.' }]
-      },
-      otp: {
-        activityType: { show: 0, type: null, text: null },
-        validation: [{ validationType: ValidationType.REQUIRED, text: 'OTP is Required.' }]
-      }
     };
   }
 
@@ -65,58 +62,68 @@ export class LoginComponent implements OnInit {
     switch (element) {
       case 'mobile':
         this.rooms = new Array<Room>();
-        this.requireOtp = false;
-        break;
-      case 'roomId':
-        this.requireOtp = false;
-        break;
+      break;
     }
   }
 
   login(formLogin) {
 
     this.formAlert.type = AlertType.INFO;
-    this.formAlert.text = 'Saving Data. Please wait.';
+    this.formAlert.text = 'Loging In. Please wait.';
 
     this.loginService.login(this.loginForm)
       .subscribe(
         response => {
           switch (response.code) {
+            case HttpStatus.UNAUTHORIZED:
             case HttpStatus.FORBIDDEN:
               this.formAlert.type = AlertType.DANGER;
               this.formAlert.text = response.message;
-              this.rooms = new Array<Room>();
-              this.requireOtp = false;
-              break;
+            break;
 
             case HttpStatus.BAD_REQUEST:
               this.formAlert.type = AlertType.DANGER;
               this.formAlert.text = response.message;
               break;
 
-
             case HttpStatus.OK:
-              if ('multipleRooms' in response.data) {
-                this.rooms = response.data.multipleRooms;
-                this.requireOtp = false;
-                this.formAlert.type = AlertType.SUCCESS;
-                this.formAlert.text = response.message;
-                return false;
+
+              if(response.data.rooms) {
+
+                if (response.data.rooms.length > 0) {
+
+                  this.loginForm.operation = 'PASSWORD';  
+                  this.rooms = response.data.rooms;
+                  this.formAlert.type = AlertType.SUCCESS;
+                  this.formAlert.text = '';
+  
+                } else {
+
+                  this.loginForm.operation = 'ROOM';  
+                  this.formAlert.type = AlertType.DANGER;
+                  this.formAlert.text = 'Something went wrong.';
+  
+                } 
+
+              } else {
+
+                if(response.data.token) {
+
+                  localStorage.setItem('token', response.data.token);
+                  this.router.navigate(['/dashboard']);
+                  return false;
+      
+                }
+
               }
 
-              if ('requireOtp' in response.data && response.data.requireOtp) {
-                this.requireOtp = true;
-                this.formAlert.type = AlertType.SUCCESS;
-                this.formAlert.text = response.message;
-              }
+            break;
 
-              if ('token' in response.data) {
-                this.formAlert.type = AlertType.SUCCESS;
-                this.formAlert.text = response.message;
-                localStorage.setItem('token', response.data.token);
-                this.router.navigate(['/dashboard']);
-              }
-              break;
+            default:
+
+              this.loginForm.operation = 'ROOM';  
+              this.formAlert.type = AlertType.DANGER;
+              this.formAlert.text = 'Something went wrong.';
           }
         },
         (error: AppError) => {

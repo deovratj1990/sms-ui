@@ -57,7 +57,9 @@ export class HeaderComponent implements OnInit {
       }
     });
 
-    this.getTransactionDefinition();
+    if(this.loginService.isLoggedIn() == true) {
+      this.getTransactionDefinition();
+    }
   }
 
   getTransactionDefinition(): void {

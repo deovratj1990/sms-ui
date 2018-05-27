@@ -22,7 +22,7 @@ export class SocietyService {
   }
 
   getAllSocieties(): Observable<ApiResponse> {
-    return this.http.get(this.url + 'get')
+    return this.http.get(this.url + 'getAll')
       .map(response => response)
       .catch(this.handleError);
   }
