@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AlertPromise } from 'selenium-webdriver';
 import { Alert } from '../../../model/common/Alert';
 import { AlertType } from '../../../model/enum/AlertType';
@@ -30,13 +30,13 @@ export class CostHeaderComponent implements OnInit {
   ngOnInit() {
     this.costHeaderAlert = {
       name: {
-        activityType: {show: 0, type: null, text: null},
+        activityType: { show: 0, type: null, text: null },
         validation: [
-          {validationType: ValidationType.REQUIRED, text: 'Cost Header is Mandatory.'},
-          {validationType: ValidationType.VALID, text: 'Cost Header must be Valid.'}
+          { validationType: ValidationType.REQUIRED, text: 'Cost Header is Mandatory.' },
+          { validationType: ValidationType.VALID, text: 'Cost Header must be Valid.' }
         ]
       }
-    }
+    };
 
     this.getCostHeaders();
   }
@@ -72,6 +72,9 @@ export class CostHeaderComponent implements OnInit {
     this.costHeaderId = 0;
     this.formAlert = new Alert();
     formCostHeader.reset();
+    this.listAlert.type = AlertType.DANGER;
+    this.listAlert.text = '';
+    (window as any).openModal('costHeaderModalForm');
   }
 
   edit(id) {
@@ -84,8 +87,16 @@ export class CostHeaderComponent implements OnInit {
     this.costHeaderService.getById(this.costHeaderId)
       .subscribe(
         response => {
+
+          if (response.code === HttpStatus.NOT_FOUND) {
+            this.listAlert.type = AlertType.DANGER;
+            this.listAlert.text = response.message;
+            return false;
+          }
+
           if (response.code === HttpStatus.OK) {
             this.costHeader = response.data.costHeader;
+            (window as any).openModal('costHeaderModalForm');
 
             this.formAlert.type = AlertType.SUCCESS;
             this.formAlert.text = response.message;
@@ -110,19 +121,41 @@ export class CostHeaderComponent implements OnInit {
     this.costHeaderService.save(this.costHeaderId, this.costHeader)
       .subscribe(
         response => {
-          if (response.code === HttpStatus.OK) {
-            if (this.costHeaders.findIndex(x => x.id == response.data.costHeader.id) == -1) {
+
+          if (response.code === HttpStatus.NOT_FOUND) {
+            (window as any).closeModal('costHeaderModalForm');
+            this.listAlert.type = AlertType.DANGER;
+            this.listAlert.text = response.message;
+            return false;
+          }
+
+          if (response.code === HttpStatus.BAD_REQUEST) {
+            this.formAlert.type = AlertType.DANGER;
+            this.formAlert.text = response.message;
+            return false;
+          }
+
+          if (response.code === HttpStatus.CREATED) {
+            let index = this.costHeaders.findIndex(x => x.id == response.data.costHeader.id);
+            if(index == -1) {
               this.costHeaders.splice(0, 0, response.data.costHeader);
             } else {
-              let index = this.costHeaders.findIndex(x => x.id == response.data.costHeader.id);
               this.costHeaders.splice(index, 1, response.data.costHeader);
             }
 
-            this.costHeaderId = 0;
-            formCostHeader.reset();
-
             this.formAlert.type = AlertType.SUCCESS;
             this.formAlert.text = response.message;
+            formCostHeader.reset();
+            return false;
+          }
+
+          if (response.code === HttpStatus.OK) {
+            (window as any).closeModal('costHeaderModalForm');
+            let index = this.costHeaders.findIndex(x => x.id == response.data.costHeader.id);
+            this.costHeaders.splice(index, 1, response.data.costHeader);
+            this.listAlert.type = AlertType.SUCCESS;
+            this.listAlert.text = response.message;
+            this.costHeaderId = 0;
             return false;
           }
 
@@ -146,7 +179,14 @@ export class CostHeaderComponent implements OnInit {
     this.costHeaderService.delete(this.costHeaderId)
       .subscribe(
         response => {
-          if (response.code === HttpStatus.NO_CONTENT) {
+          if (response.code === HttpStatus.NOT_FOUND) {
+            this.costHeaderId = 0;
+            this.listAlert.type = AlertType.DANGER;
+            this.listAlert.text = response.message;
+            return false;
+          }
+
+          if (response.code === HttpStatus.OK) {
             let index = this.costHeaders.findIndex(x => x.id == this.costHeaderId);
             this.costHeaders.splice(index, 1);
             this.costHeaderId = 0;

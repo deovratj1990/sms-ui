@@ -1,0 +1,26 @@
+1. Populate CostHeader List -
+    1. Display Table - /accounts/costHeader/getAll
+        1. NO_CONTENT - code: 204, message: No Data, data: []
+        2. OK - code:200, message: Successful, data: costHeaders: [{id, name}]
+
+    2. Actions -
+        1. Edit -
+            1. Edit - populate costHeader by id - /accounts/costHeader/getById/id
+                1. NOT_FOUND - code: 404, message: Cost Header Not Found., data: []
+                2. OK - code: 200, message: Successful., data: costHeader: {id, name}
+                    Populate data on form
+
+            2. Edit and Save changes - /accounts/costHeader/edit/id
+                1. NOT_FOUND - code: 404, message: Cost Header Not Found., data: []
+                2. BAD_INPUT - Validation Error - code: 400, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+                3. OK - code: 200, message: Edit Successful, data: costHeader: {id, name}
+                    Populate data on form
+
+        2. Delete - /accounts/costHeader/delete/id
+            1. NOT_FOUND - code: 404, message: Cost Header Not Found., data: []
+            3. OK - code: 200, message: Delete Successful, data: costHeader: {id}
+
+2. Data Entry - 
+    1. Save - accounts/costHeader/save
+        1. BAD_INPUT - Validation Error - code: 400, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+        2. CREATED - code: 201, message: Save Successful, data: costHeader: {id, name}

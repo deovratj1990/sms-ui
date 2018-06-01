@@ -21,12 +21,12 @@ export class RoomService {
       this.url = Config.API_URL + this.reqMap + '/';
   }
 
-  getRoomsBySocietyId(id): Observable<ApiResponse> {
+  getBySocietyId(id): Observable<ApiResponse> {
     let url: string = '&';
     if (Config.API_TYPE != 'PHP'){
       url = '?';
     }
-    return this.http.get(this.url + 'get' + url + 'society=' + id)
+    return this.http.get(this.url + 'getBySocietyId' + url + 'society=' + id)
     .map(response => response)
     .catch(this.handleError);
   }

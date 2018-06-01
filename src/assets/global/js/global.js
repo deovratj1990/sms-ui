@@ -15,3 +15,11 @@ function closeMenu() {
         $('#' + allCollapse[i].id).collapse('hide');
     }
 }
+
+function closeModal(id) {
+    $('#'+id).modal('hide');
+}
+
+function openModal(id) {
+    $('#'+id).modal('show');
+}

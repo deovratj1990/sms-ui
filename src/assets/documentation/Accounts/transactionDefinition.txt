@@ -1,0 +1,49 @@
+1. Populate TransactionDefiniton List - 
+    1. Display Table - /accounts/transactionDefinition/getAll
+        1. NO_CONTENT - code: 204, message: No Data, data: []
+        2. OK - code:200, message: Successful, data: 
+            transactionDefinitions: [{id, costHeader: {id, name}, interval, transactionFrom, transactionTo, hasParticular, fromDate,
+                                    particulars: {id, costHeader: {id, name}, amount} , amount}]
+
+    2. Actions -
+        1. Show Details - 
+            1. Display all details by transactionDefinitionId
+        2. Edit
+            1. Edit - populate transactionDefinition by Id - accounts/transactionDefinition/getById/id
+                1. NOT_FOUND - code: 404, message: Transaction Definiton Not Found., data: []
+                2. BAD_INPUT - Validation Error - code: 400, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+                3. OK - code: 200, message: Successful., data:
+                    transactionDefinition: [{id, costHeader: {id, name}, interval, transactionFrom, transactionTo, hasParticular, fromDate,
+                                            particulars: {id, costHeader: {id, name}, amount} , amount}]
+                    Populate data on form
+
+            2. Edit and Save changes - /accounts/transactionDefinition/edit/id
+                1. NOT_FOUND - code: 404, message: Transaction Definiton Not Found., data: []
+                2. BAD_INPUT - Validation Error - code: 400, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+                3. OK - code: 200, message: Edit Successful, data: 
+                    transactionDefinition: [{id, costHeader: {id, name}, interval, transactionFrom, transactionTo, hasParticular, fromDate,
+                                            particulars: {id, costHeader: {id, name}, amount} , amount}]
+                    Populate data on form
+
+        2. Delete - /accounts/transactionDefinition/delete/id
+            1. NOT_FOUND - code: 404, message: Cost Header Not Found., data: []
+            3. OK - code: 200, message: Delete Successful, data: transactionDefinition: {id}
+
+2. Form Data
+    1. get costHeader - /accounts/costHeader/getAll
+        1. NO_CONTENT - code: 204, message: No Data, data: []
+        2. OK - code:200, message: Successful, data: costHeaders: [{id, name}]
+
+    2. get interval / transactionForm / transactionTo - /accounts/Enums/getAll
+        1. NO_CONTENT - code: 204, message: No Data, data: []
+        2. OK - code:200, message: Successful, data: enums: 
+            {interval: [{id, name}], accountTypes: [{id, name}] }
+
+    3. save - /accounts/transactionDefinition/save
+        1. BAD_INPUT - Validation Error - code: 400, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+        2. CONFLICT - code: 409, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+        3. CREATED - code: 201, message: Save Successful, data: 
+            transactionDefinition: [{id, costHeader: {id, name}, interval, transactionFrom, transactionTo, hasParticular, fromDate,
+                                    particulars: {id, costHeader: {id, name}, amount} , amount}]
+            Populate data on form
+

@@ -1,0 +1,34 @@
+LOGIN - /login
+
+1. Enter Mobile - /user/login
+	1. BAD_INPUT - Validation Error - code: 400, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+	2. NOT_FOUND - Mobile not registered - code: 404, message: Mobile not registered. Please register before loging in., data: []
+	3. OK - Mobile registered - 
+		1. Multiple Room - code: 200, message: Success., data: rooms: [{accessId, address, status }]
+			display select with rooms and ask password.
+
+2. Select Room and enter Password -
+	(check mobile, password, accessId) - 
+	1. BAD_INPUT - Validation Error - code: 400, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+	2. BAD_REQUEST - Failure - code: 400, message: Incorrect password, data: []
+	3. UNAUTHORIZED/FORBIDDEN - code: 401/403, message: Account deactivated/cancelled/deleted, data:[]
+	4. OK - Login Successfull - code: 200, message: Login Successful, data: {token: ''}
+
+
+REGISTRATION - /register
+
+1. Populate Society - /society/getAll
+	1. NO_CONTENT - code: 204, message: No Data, data: []
+	2. OK - code: 200, message: Success, data: societies: [{id, name, wingCount, roomCount, status}]
+
+2. Get room by societyId - /society/room/getBySocietyId/id
+	1. BAD_REQUEST - no societyId - code: 400, message: No societyId, data: []
+	2. NO_CONTENT - code: 204, message: No Data, data: []
+	3. OK - code: 200, message: Success, data: societies: [{id, name, wingId}]
+
+3. Submit Form - /user/register
+	1. BAD_INPUT - Validation Error - code: 400, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+	2. CONFLICT - when mobile society and room are same - code: 409, message: Registration Already Done, Please collect Password from your Society Secretary and Login., data: []
+	3. CREATED - code: 201, message, Registraion Successful, Please Collet Password from society secretary and login., data: []
+
+

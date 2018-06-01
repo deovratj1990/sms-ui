@@ -98,10 +98,25 @@ export class MemberRegistrationComponent implements OnInit {
 
     this.memberRegistrationAlerts.roomId.activityType.show = 1;
 
-    this.roomService.getRoomsBySocietyId(this.memberRegistrationForm.societyId)
+    this.roomService.getBySocietyId(this.memberRegistrationForm.societyId)
       .subscribe(
         response => {
-          if (response.code === HttpStatus.OK || response.code === HttpStatus.NO_CONTENT) {
+
+          if (response.code === HttpStatus.BAD_REQUEST) {
+            this.memberRegistrationAlerts.roomId.activityType.show = 1;
+            this.memberRegistrationAlerts.roomId.activityType.type = AlertType.DANGER
+            this.memberRegistrationAlerts.roomId.activityType.text = 'Something went wrong.';
+            return false;
+          }
+
+          if ( response.code === HttpStatus.NO_CONTENT ) {
+            this.memberRegistrationAlerts.roomId.activityType.show = 1;
+            this.memberRegistrationAlerts.roomId.activityType.type = AlertType.DANGER
+            this.memberRegistrationAlerts.roomId.activityType.text = response.message;
+            return false;
+          }
+
+          if (response.code === HttpStatus.OK) {
             this.rooms = response.data.rooms;
             this.memberRegistrationAlerts.roomId.activityType.show = 0;
             return false;

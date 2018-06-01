@@ -25,15 +25,16 @@ export class CostHeaderService {
     }
 
     save(id, payload): Observable<ApiResponse> {
-        let hitUrl = 'save';
-        if (id != 0 || id != '') {
-            hitUrl += '&id=' + id;
+        if (id == 0 || id == '') {
+            return this.http.post(this.url + 'save', JSON.stringify(payload))
+                .map(response => response)
+                .catch(this.handleError);
+        } else {
+            return this.http.put(this.url + 'edit&id='+id, JSON.stringify(payload))
+                .map(response => response)
+                .catch(this.handleError);
         }
-        
-        return this.http.post(this.url + hitUrl, JSON.stringify(payload))
-        .map(response => response)
-        .catch(this.handleError);
-}
+    }
 
     getById(id): Observable<ApiResponse> {
         return this.http.get(this.url + 'getById&id=' + id)

@@ -75,6 +75,12 @@ export class LoginComponent implements OnInit {
       .subscribe(
         response => {
           switch (response.code) {
+
+            case HttpStatus.NOT_FOUND:
+              this.formAlert.type = AlertType.DANGER;
+              this.formAlert.text = response.message;
+            break;
+
             case HttpStatus.UNAUTHORIZED:
             case HttpStatus.FORBIDDEN:
               this.formAlert.type = AlertType.DANGER;

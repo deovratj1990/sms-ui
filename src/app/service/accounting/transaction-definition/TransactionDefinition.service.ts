@@ -30,25 +30,29 @@ export class TransactionDefinitionService {
             .catch(this.handleError);
     }
 
-    save(id, payload): Observable<ApiResponse> {
-        let hitUrl = 'save';
-        this.transactionDefinition.next({code: null, message: null, data: null});
-        if (id != 0 || id != '') {
-            hitUrl += 'edit&id=' + id;
-        }
-
-        return this.http.put(this.url + hitUrl, JSON.stringify(payload))
-            .map(response => {
-                this.transactionDefinition.next({code: response['code'], message: response['message'], data: response['data']});
-                return response;
-            })
-            .catch(this.handleError);
-    }
-
     getById(id): Observable<ApiResponse> {
         return this.http.get(this.url + 'getById&id=' + id)
             .map(response => response)
             .catch(this.handleError);
+    }
+
+    save(id, payload): Observable<ApiResponse> {
+        this.transactionDefinition.next({code: null, message: null, data: null});
+        if (id == 0 || id == '') {
+            return this.http.post(this.url + 'save', JSON.stringify(payload))
+                .map(response => {
+                    this.transactionDefinition.next({code: response['code'], message: response['message'], data: response['data']});
+                    return response;
+                })
+                .catch(this.handleError);
+        } else {
+            return this.http.put(this.url + 'edit&id='+id, JSON.stringify(payload))
+                .map(response => {
+                    this.transactionDefinition.next({code: response['code'], message: response['message'], data: response['data']});
+                    return response;
+                })
+                .catch(this.handleError);
+        }
     }
 
     delete(id): Observable<ApiResponse> {

@@ -41,8 +41,7 @@
   <div class="card-header text-left">
     <h5>Cost Headers</h5>
     <button class="btn btn-outline-primary" style="position: absolute; right: 10px; top: 10px;"
-            (click)="resetForm(formCostHeader)"
-            data-toggle="modal" data-target="#costHeaderModalForm">Add Cost Header
+            (click)="resetForm(formCostHeader)">Add Cost Header
     </button>
   </div>
   <div class="card-body p-0">
@@ -61,9 +60,7 @@
         <th scope="row">{{ i+1 }}</th>
         <td>{{ ch.name }}</td>
         <td align="right">
-            <span class="glyphicon glyphicon-pencil text-primary mr-2" style="cursor: pointer;" (click)="edit(ch.id)"
-                  data-toggle="modal"
-                  data-target="#costHeaderModalForm"></span>
+            <span class="glyphicon glyphicon-pencil text-primary mr-2" style="cursor: pointer;" (click)="edit(ch.id)"></span>
           <span class="glyphicon glyphicon-remove text-danger" style="cursor: pointer;" (click)="delete(ch.id)"></span>
         </td>
       </tr>

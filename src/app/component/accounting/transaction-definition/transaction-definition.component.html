@@ -1,7 +1,7 @@
 <form #formTransactionDefinition="ngForm" (ngSubmit)="save(formTransactionDefinition)">
 
   <!-- Modal -->
-  <div class="modal fade" id="tranDefModalForm" tabindex="-1" role="dialog" aria-labelledby="tranDefModalForm" aria-hidden="true">
+  <div class="modal fade" id="tranDefModalForm" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header bg-light">
@@ -121,7 +121,7 @@
 </form>
 
 <!-- Modal -->
-<div class="modal fade" id="tranDefDetailsModal" tabindex="-1" role="dialog" aria-labelledby="tranDefDetailsModal" aria-hidden="true">
+<div class="modal fade" id="tranDefModalDetails" tabindex="-1" role="dialog" *ngIf="transactionDefinitionDetail">
   <div class="modal-dialog modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header bg-light">
@@ -173,7 +173,7 @@
       </div>
       <div class="modal-footer bg-light">
         <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-outline-primary" data-dismiss="modal" aria-label="Close" data-toggle="modal" data-target="#tranDefModalForm">Edit
+        <button type="button" class="btn btn-outline-primary" (click)="edit(transactionDefinitionDetail.id)">Edit
         </button>
       </div>
     </div>
@@ -186,8 +186,7 @@
 
   <div class="card-header text-left col-12">
     <h5>Tran Def'n</h5>
-    <button class="btn btn-outline-primary" style="position: absolute; right: 10px; top: 10px;" (click)="resetForm(formTransactionDefinition)"
-      data-toggle="modal" data-target="#tranDefModalForm">Add Transaction Def
+    <button class="btn btn-outline-primary" style="position: absolute; right: 10px; top: 10px;" (click)="resetForm(formTransactionDefinition)">Add Transaction Def
     </button>
   </div>
   <div class="card-body p-0">
@@ -205,10 +204,8 @@
           <th scope="row">{{ i+1 }}</th>
           <td>{{ td.costHeader.name }}</td>
           <td class="text-right">
-            <span class="glyphicon glyphicon-list-alt text-info mr-2" style="cursor: pointer;" (click)="showDetails(td.id)" data-toggle="modal"
-              data-target="#tranDefDetailsModal"></span>
-            <span class="glyphicon glyphicon-pencil text-primary mr-2" style="cursor: pointer;" (click)="edit(td.id)" data-toggle="modal"
-              data-target="#tranDefModalForm"></span>
+            <span class="glyphicon glyphicon-list-alt text-info mr-2" style="cursor: pointer;" (click)="showDetails(td.id)"></span>
+            <span class="glyphicon glyphicon-pencil text-primary mr-2" style="cursor: pointer;" (click)="edit(td.id)"></span>
             <span class="glyphicon glyphicon-remove text-danger" style="cursor: pointer;" (click)="delete(td.id)"></span>
           </td>
         </tr>
