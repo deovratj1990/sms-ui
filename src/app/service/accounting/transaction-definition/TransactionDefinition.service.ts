@@ -11,18 +11,25 @@ import { AppError } from '../../../model/error/app-error';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TransactionDefinition } from '../../../model/transaction/definition/TransitionDefinition';
 import { HttpStatus } from '../../../model/common/HttpStatus';
+import { Config } from '../../../model/common/Config';
 
 @Injectable()
 export class TransactionDefinitionService {
+
+    private reqMap: string = 'transactionDefinition';
+    private url: string;
 
     private transactionDefinition: BehaviorSubject<ApiResponse> = new BehaviorSubject<ApiResponse>(
         {code: null, message: null, data: null}
     );
     transactionDefinitionUpdates = this.transactionDefinition.asObservable();  
 
-    private url = 'http://localhost/sms-proxy/transactionDefinition.php?action=';
-
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        if (Config.API_TYPE == 'PHP')
+            this.url = Config.API_URL + this.reqMap + '.php?action=';
+        else
+            this.url = Config.API_URL + this.reqMap + '/';
+     }
 
     getAll(): Observable<ApiResponse> {
         return this.http.get(this.url + 'getAll')

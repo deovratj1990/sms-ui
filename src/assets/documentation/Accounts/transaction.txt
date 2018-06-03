@@ -1,0 +1,47 @@
+1. get transactionDetails - /accounting/transaction/getByTransactionId
+    1. NO_CONTENT - code: 204, message: No Data, data: []
+        redirect to transaction Definition
+    2. OK - code:200, message: Successful, data: 
+        transactionDetails: {societyId, tdId, transactionFrom, transactionTo, entityName
+                            entityList: [id, name], amount, paymentType, paymentDetails}
+        populate on form
+
+2. Form
+    1. (Entity Name) - Member / Vendor / Customer / Staff
+        1. Member - ( transaction definition to MEMBER) - /society/user/getBySocietyId/id
+            1. NO_CONTENT - code: 204, message: No Data, data: []
+            2. OK - code:200, message: Successful, data: 
+                rooms: [{id, name}]        
+                                                OR
+        
+        2. Tenant - ( transaction definition to Tenant) - /entity/getTenantBySocietyId/id
+            1. NO_CONTENT - code: 204, message: No Data, data: []
+            2. OK - code:200, message: Successful, data: 
+                vendors: [{id, name}]        
+                                                OR
+        
+        3. Customer - ( transaction definition to CUSTOMER) - /entity/getCustomerBySocietyId/id
+            1. NO_CONTENT - code: 204, message: No Data, data: []
+            2. OK - code:200, message: Successful, data: 
+                customers: [{id, name}]
+                                                OR
+        
+        3. Staff - ( transaction definition to CUSTOMER) - /user/getStaffBySocietyId/id
+            1. NO_CONTENT - code: 204, message: No Data, data: []
+            2. OK - code:200, message: Successful, data: 
+                staff: [{id, name}]
+                                                OR
+        
+        5. Vendor - ( transaction definition to VENDOR) - /entity/getEntityBySocietyId/id
+            1. NO_CONTENT - code: 204, message: No Data, data: []
+            2. OK - code:200, message: Successful, data: 
+                vendors: [{id, name}]        
+
+    2. Save - /accounting/tansaction/save
+        1. NOT_FOUND - code: 404, message: Transaction Definiton Not Found., data: []
+        1. BAD_INPUT - Validation Error - code: 400, message: Bad Input, data: [{fieldName: {validationType, alertType, text}}]
+        2. CREATED - code: 201, message: Save Successful, data: 
+            transactionDetails: {societyId, tdId, transactionFrom, transactionTo, entityName
+                                entityList: [id, name], amount, paymentType, paymentDetails}
+            show message for payment.
+            populate on form

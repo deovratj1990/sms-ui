@@ -1,0 +1,120 @@
+<div class="card p-0 mt-3" *ngIf="transactionForm">
+
+  <div class="card-header text-left col-12">
+    <h5>Voucher Type (Pay / Collect) - Transaction Def Name</h5>
+  </div>
+  <div class="card-body p-0">
+
+    <form #formTransaction="ngForm" (ngSubmit)="save(formTransaction)">
+
+      <div class="row text-left p-3">
+
+        <div class="col-lg-12">
+          <app-alert [alert]="formAlert"></app-alert>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="societyId" class="col-form-label">Society</label>
+            <input type="text" class="form-control" id="societyId" name="societyId" [(ngModel)]="transactionForm.societyId"
+              #societyId="ngModel" readonly>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="tdId" class="col-form-label">Transaction Definition</label>
+            <input type="text" class="form-control" id="tdId" name="tdId" [(ngModel)]="transactionForm.tdId"
+              #tdId="ngModel" readonly>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="transactionFrom" class="col-form-label">Transaction From</label>
+            <input type="text" class="form-control" id="transactionFrom" name="transactionFrom" [(ngModel)]="transactionForm.transactionFrom"
+              #transactionFrom="ngModel" readonly>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="transactionTo" class="col-form-label">Transaction To</label>
+            <input type="text" class="form-control" id="transactionTo" name="transactionTo" [(ngModel)]="transactionForm.transactionTo"
+              #transactionTo="ngModel" readonly>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="entityId" class="col-form-label">{{ transactionForm.entityName }}</label>
+            <select class="form-control" id="entityId" name="entityId" [(ngModel)]="transactionForm.entityId"
+              #entityId="ngModel" required>
+              <option value="">-Select-</option>
+              <option *ngFor="let e of entityList" [value]="e.id"> {{ e.name }}</option>
+            </select>
+            <app-validation-error [element]="transactionAlert.entityId" [model]="entityId"></app-validation-error>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="amount" class="col-form-label">Amount</label>
+            <input type="text" class="form-control" id="amount" name="amount" [(ngModel)]="transactionForm.amount"
+              #amount="ngModel" required readonly>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="date" class="col-form-label">Date</label>
+            <input class="form-control" type="date" id="date" name="date" [(ngModel)]="transactionForm.date"
+              #date="ngModel" onkeydown="return false" min="{{formatDate}}" required>
+            <app-validation-error [element]="transactionAlert.date" [model]="date"></app-validation-error>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="paymentAmount" class="col-form-label">Payment Amount</label>
+            <input class="form-control" type="text" id="paymentAmount" name="paymentAmount" [(ngModel)]="transactionForm.paymentAmount"
+              #paymentAmount="ngModel" required>
+            <app-validation-error [element]="transactionAlert.paymentAmount" [model]="paymentAmount"></app-validation-error>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="paymentType" class="col-form-label">Payment Type</label>
+            <select class="form-control" id="paymentType" name="paymentType" [(ngModel)]="transactionForm.paymentType"
+              #paymentType="ngModel" required>
+              <option value="">-Select-</option>
+              <option value="1">Cash</option>
+              <option value="2">Cheque</option>
+            </select>
+            <app-validation-error [element]="transactionAlert.paymentType" [model]="paymentType" [matchField]="transactionFrom"></app-validation-error>
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <div class="form-group">
+            <label for="paymentDetail" class="col-form-label">Payment Details</label>
+            <input class="form-control" type="text" id="paymentDetail" name="paymentDetail"
+              [(ngModel)]="transactionForm.paymentDetail" #paymentDetail="ngModel">
+          </div>
+        </div>
+
+        <div class="col-12 text-right">
+          <div class="form-group">
+            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Cancel</button>
+            <button class="btn btn-outline-primary" type="submit" [disabled]="!formTransaction.valid">Save
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </form>
+
+  </div>
+</div>

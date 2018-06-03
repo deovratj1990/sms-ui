@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     this.loginForm.operation = 'ROOM';
 
     if (this.loginService.isLoggedIn()) {
-      router.navigate(['/dashboard']);
+      this.router.navigate(['/dashboard']);
     };
 
 

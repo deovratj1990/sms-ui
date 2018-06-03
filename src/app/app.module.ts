@@ -15,8 +15,10 @@ import { TransactionDefinitionComponent } from './component/accounting/transacti
 import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
 import { AlertResponseComponent } from './component/alert/alert.component';
 import { ValidationErrorComponent } from './component/validation-error/validation-error.component';
+import { TransactionComponent } from './component/accounting/transaction/transaction.component';
 
 import { RoutingModule } from './module/routerModule/Routing.module';
+
 import { LoginService } from './service/user/login/Login.service';
 import { AuthGuard } from './service/auth/Auth.service';
 import { SocietyService } from './service/society/society/Society.service';
@@ -25,10 +27,10 @@ import { CostHeaderService } from './service/accounting/cost-header/CostHeader.s
 import { MemberRegistrationService } from './service/user/member-registration/MemberRegistration.service';
 import { TransactionDefinitionService } from './service/accounting/transaction-definition/TransactionDefinition.service';
 import { StaticFormContentService } from './service/staticFormContent/StaticFormContent.service';
-import { AppErrorHandler } from './model/error/app-error-handler';
 import { RequestInteceptor } from './service/interceptor/RequestInterceptor.service';
-import { VoucherComponent } from './component/voucher/voucher.component';
 
+import { AppErrorHandler } from './model/error/app-error-handler';
+import { TransactionService } from './service/accounting/transaction/Transaction.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,7 @@ import { VoucherComponent } from './component/voucher/voucher.component';
     PageNotFoundComponent,
     AlertResponseComponent,
     ValidationErrorComponent,
-    VoucherComponent,
+    TransactionComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +61,7 @@ import { VoucherComponent } from './component/voucher/voucher.component';
     MemberRegistrationService,
     CostHeaderService,
     TransactionDefinitionService,
+    TransactionService,
     StaticFormContentService,
     { provide: AppErrorHandler, useClass: ErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: RequestInteceptor, multi: true }

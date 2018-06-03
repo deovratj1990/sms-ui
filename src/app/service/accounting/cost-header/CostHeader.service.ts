@@ -8,15 +8,21 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/throw';
 import { ApiResponse } from '../../../model/common/ApiResponse';
 import { AppError } from '../../../model/error/app-error';
+import { Config } from '../../../model/common/Config';
 
 @Injectable()
 export class CostHeaderService {
 
-    private apiResponse: ApiResponse = new ApiResponse();
+    private reqMap: string = 'costHeader';
+    private url: string;
 
-    private url = 'http://localhost/sms-proxy/costHeader.php?action=';
+    constructor(private http: HttpClient) {
+        if (Config.API_TYPE == 'PHP')
+            this.url = Config.API_URL + this.reqMap + '.php?action=';
+        else
+            this.url = Config.API_URL + this.reqMap + '/';
+    }
 
-    constructor(private http: HttpClient) { }
 
     getAll(): Observable<ApiResponse> {
         return this.http.get(this.url + 'getAll')
@@ -30,7 +36,7 @@ export class CostHeaderService {
                 .map(response => response)
                 .catch(this.handleError);
         } else {
-            return this.http.put(this.url + 'edit&id='+id, JSON.stringify(payload))
+            return this.http.put(this.url + 'edit&id=' + id, JSON.stringify(payload))
                 .map(response => response)
                 .catch(this.handleError);
         }

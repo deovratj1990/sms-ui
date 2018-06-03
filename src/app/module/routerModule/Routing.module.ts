@@ -7,7 +7,7 @@ import { LoginComponent } from "../../component/user/login/login.component";
 import { MemberRegistrationComponent } from "../../component/user/member-registration/member-registration.component";
 import { PageNotFoundComponent } from "../../component/page-not-found/page-not-found.component";
 import { AuthGuard } from "../../service/auth/Auth.service";
-import { VoucherComponent } from "../../component/voucher/voucher.component";
+import { TransactionComponent } from "../../component/accounting/transaction/transaction.component";
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -16,7 +16,7 @@ const routes: Routes = [
     { path: 'transaction-definition', component: TransactionDefinitionComponent, canActivate: [AuthGuard] },
     { path: 'login', component: LoginComponent },
     { path: 'member-registration', component: MemberRegistrationComponent },
-    { path: 'voucher/:id', component: VoucherComponent },
+    { path: 'transaction/:id', component: TransactionComponent },
     { path: '**', component: PageNotFoundComponent }
 ]
 

@@ -135,18 +135,13 @@
         <table class="table table-bordered m-0">
           <tbody>
             <tr>
-              <th scope="row" width="40%">Cost Header</th>
-              <td>{{ transactionDefinitionDetail.costHeader.name }}</td>
+              <th scope="row" width="40%">Transaction To</th>
+              <td><strong>{{ transactionDefinitionDetail.costHeader.name }}</strong> ( {{ transactionDefinitionDetail.transactionTo }} )</td>
             </tr>
             <tr>
               <th scope="row">Transaction From</th>
               <td>{{ transactionDefinitionDetail.transactionFrom }}</td>
             </tr>
-            <tr>
-              <th scope="row">Transaction To</th>
-              <td>{{ transactionDefinitionDetail.transactionTo }}</td>
-            </tr>
-            
             <tr *ngIf="transactionDefinitionDetail.particulars.length != 0">
               <th scope="row">Particulars</th>
               <td>

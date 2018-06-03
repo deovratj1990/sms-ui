@@ -52,14 +52,12 @@ export class HeaderComponent implements OnInit {
               name: response.data.transactionDefinition.costHeader.name
             });
           }
-          
+
         }
       }
     });
 
-    if(this.loginService.isLoggedIn() == true) {
-      this.getTransactionDefinition();
-    }
+    this.getTransactionDefinition();
   }
 
   getTransactionDefinition(): void {

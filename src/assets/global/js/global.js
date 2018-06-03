@@ -5,6 +5,8 @@ $(document).ready(() => {
         for (var i = 0; i < allCollapse.length; i++) {
             $('#' + allCollapse[i].id).collapse('hide');
         }
+
+        //console.log('close');
     });
 });
 

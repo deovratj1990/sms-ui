@@ -10,7 +10,7 @@
     <div *ngFor="let div of element.validation">
         <div [ngSwitch]="div.validationType">
             <div *ngSwitchCase="ValidationType.REQUIRED">
-                <small class="d-block text-danger" *ngIf="!model.valid && !model.value">
+                <small class="d-block text-danger" *ngIf="(!model.valid && !model.value) || model.value == 0">
                     {{ div.text }}
                 </small>
             </div>
